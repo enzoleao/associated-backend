@@ -12,7 +12,7 @@ export class MinioStorageService {
 
   constructor() {
     this.client = new S3Client({
-      endpoint: process.env.MINIO_ENDPOINT,
+      endpoint: process.env.MINIO_PUBLIC_ENDPOINT,
       forcePathStyle: true,
       region: 'us-east-1',
       credentials: {
