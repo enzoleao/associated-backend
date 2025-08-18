@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model TenantStatus {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  tenants Tenant[]
+
+  @@map("tenant_status")
+}
+
+model Tenant {
+  id                String   @id @default(uuid())
+  tenant_address_id String?
+  tenant_status_id  Int?
+  name              String?
+  is_open           Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  address TenantAddress? @relation(fields: [tenant_address_id], references: [id])
+  status  TenantStatus?  @relation(fields: [tenant_status_id], references: [id])
+
+  users      User[]
+  products   Product[]
+  promotions Promotion[]
+  addons     Addon[]
+
+  @@map("tenants")
+}
+
+model TenantAddress {
+  id           String    @id @default(uuid())
+  street       String
+  neighborhood String
+  number       String?
+  longitude    String
+  latitude     String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+
+  tenants Tenant[]
+
+  @@map("tenant_address")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  tenant_id  String
+  name       String
+  initials   String
+  email      String    @unique
+  password   String
+  role_id    Int
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  tenant            Tenant      @relation(fields: [tenant_id], references: [id])
+  role              Role        @relation(fields: [role_id], references: [id])
+  createdProducts   Product[]   @relation("CreatedProducts")
+  updatedProducts   Product[]   @relation("UpdatedProducts")
+  createdPromotions Promotion[] @relation("CreatedPromotions")
+  updatedPromotions Promotion[] @relation("UpdatedPromotions")
+
+  @@map("users")
+}
+
+model Product {
+  id                  String    @id @default(uuid())
+  tenant_id           String
+  product_category_id Int
+  promotion_id        String?
+  name                String
+  description         String?
+  price               Float
+  image_path          String?
+  creator_user_id     String
+  updater_user_id     String?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime? @updatedAt
+
+  tenant    Tenant             @relation(fields: [tenant_id], references: [id])
+  category  ProductCategory    @relation(fields: [product_category_id], references: [id])
+  promotion Promotion?         @relation(fields: [promotion_id], references: [id])
+  creator   User               @relation("CreatedProducts", fields: [creator_user_id], references: [id])
+  updater   User?              @relation("UpdatedProducts", fields: [updater_user_id], references: [id])
+  addon     ProductHasAddons[]
+
+  @@map("products")
+}
+
+model Promotion {
+  id              String       @id @default(uuid())
+  tenant_id       String
+  title           String
+  discount_type   DiscountType
+  value           Decimal
+  start_date      DateTime
+  end_date        DateTime
+  is_active       Boolean
+  creator_user_id String
+  updater_user_id String?
+  created_at      DateTime     @default(now())
+  updated_at      DateTime?    @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenant_id], references: [id])
+  creator  User      @relation("CreatedPromotions", fields: [creator_user_id], references: [id])
+  updater  User?     @relation("UpdatedPromotions", fields: [updater_user_id], references: [id])
+  products Product[]
+
+  @@map("promotions")
+}
+
+model ProductCategory {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  products Product[]
+
+  @@map("products_categories")
+}
+
+model Role {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  users       User[]
+  permissions RolesHasPermissions[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  resource   String
+  method     String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  roles RolesHasPermissions[]
+
+  @@map("permissions")
+}
+
+model RolesHasPermissions {
+  permission_id Int
+  role_id       Int
+
+  permission Permission @relation(fields: [permission_id], references: [id])
+  role       Role       @relation(fields: [role_id], references: [id])
+
+  @@id([permission_id, role_id])
+  @@map("roles_has_permissions")
+}
+
+model Addon {
+  id         String    @id @default(uuid())
+  tenant_id  String
+  name       String
+  price      Float
+  image_path String?
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  product ProductHasAddons[]
+  tenant  Tenant             @relation(fields: [tenant_id], references: [id])
+
+  @@map("addons")
+}
+
+model ProductHasAddons {
+  product_id String
+  addon_id   String
+
+  product Product @relation(fields: [product_id], references: [id])
+  addon   Addon   @relation(fields: [addon_id], references: [id])
+
+  @@id([product_id, addon_id])
+  @@map("product_has_addons")
+}
