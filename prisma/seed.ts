@@ -3,7 +3,7 @@ import {
   ProductsPermissionSeeder,
   UsersPermissionSeeder,
 } from './seeders/permissions';
-import { ProductsCategoriesSeeder, RolesSeeder } from './seeders/starts';
+import { ProductsCategoriesSeeder, RolesSeeder, OrderStatusSeeder } from './seeders/starts';
 import { RolesPermisionSeeder } from './seeders/permissions/roles-permission.seeder';
 
 class Seeder {
@@ -17,6 +17,7 @@ class Seeder {
       new ProductsCategoriesSeeder(),
       new ProductsCategoriesPermissionSeeder(),
       new RolesPermisionSeeder(),
+      new OrderStatusSeeder()
     ];
   }
 

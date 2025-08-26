@@ -1,4 +1,4 @@
-import { Product } from '@prisma/client';
+import { Product, Promotion } from '@prisma/client';
 import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
 
 export interface IProductRepository {
@@ -9,4 +9,7 @@ export interface IProductRepository {
   getProductsPromotions();
 
   getProductById(id: string);
+
+  getProductsById(id: string[]): Promise<(Product & { promotion: Promotion | null })[]>
+;
 }

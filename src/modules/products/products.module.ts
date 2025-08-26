@@ -10,6 +10,7 @@ import {
 } from '@/modules/products/use-cases';
 import { ProductRepository } from '@/modules/products/repositories/implementation/product.repository';
 import { PrismaService } from '@/modules/prisma/prisma.service';
+import { GetProductsByIdUseCase } from './use-cases/get-products-by-id/get-products-by-id.usecase';
 
 @Module({
   controllers: [ProductsController],
@@ -22,6 +23,8 @@ import { PrismaService } from '@/modules/prisma/prisma.service';
     GetProductGroupedUsecase,
     GetProductsPromotionsUseCase,
     GetProductByIdUseCase,
+    GetProductsByIdUseCase,
   ],
+  exports: [GetProductsByIdUseCase]
 })
 export class ProductsModule {}

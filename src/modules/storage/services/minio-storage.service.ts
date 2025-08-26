@@ -25,7 +25,7 @@ export class MinioStorageService {
   async getPresignedUploadUrl({
     key,
     contentType,
-    expiresIn = 60,
+    expiresIn = 600,
   }: {
     key: string;
     contentType: string;

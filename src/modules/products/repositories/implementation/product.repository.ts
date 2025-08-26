@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from '@prisma/client';
+import { Product, Promotion } from '@prisma/client';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { IProductRepository } from '@/modules/products/repositories/product.repository';
 import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
@@ -102,5 +102,19 @@ export class ProductRepository implements IProductRepository {
         id,
       },
     });
+  }
+
+  async getProductsById(ids: string[]): Promise<(Product & { promotion: Promotion | null })[]>
+{
+    return this.prismaService.tenantQuery('product', 'findMany', {
+      where: {
+        id: {
+          in: ids
+        }
+      },
+      include: {
+        promotion: true
+      }
+    })
   }
 }

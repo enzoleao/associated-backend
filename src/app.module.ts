@@ -1,7 +1,11 @@
 import { Module, NestModule } from '@nestjs/common';
 import {
+  AddonsModule,
   AuthModule,
   ContextModule,
+  OrderProductAddonsModule,
+  OrderProductsModule,
+  OrdersModule,
   ProductsModule,
   StorageModule,
   TenantsModule,
@@ -18,6 +22,10 @@ import { JwtStrategy } from '@/modules/auth/strategy/jwt.strategy';
     AuthModule,
     StorageModule,
     TenantsModule,
+    OrdersModule,
+    AddonsModule,
+    OrderProductsModule,
+    OrderProductAddonsModule
   ],
   providers: [PrismaService, JwtStrategy],
 })

@@ -19,4 +19,12 @@ export class AuthController {
   userSigning(@Body() userSigningRequestDto: UserSigningRequestDto) {
     return this.userSigningUseCase.execute(userSigningRequestDto);
   }
+  @Endpoint({
+    method: 'POST',
+    route: '/client',
+    summary: 'Auth Client.',
+  })
+  clientSign(@Body() userSigningRequestDto: UserSigningRequestDto) {
+    return this.userSigningUseCase.execute(userSigningRequestDto);
+  }
 }

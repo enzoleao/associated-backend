@@ -4,3 +4,8 @@ export { ContextModule } from './context/context.module';
 export { AuthModule } from './auth/auth.module';
 export { StorageModule } from './storage/storage.module';
 export { TenantsModule } from './tenants/tenants.module';
+export { OrdersModule } from './orders/orders.module'
+export { AddonsModule } from './addons/addons.module'
+export { OrderProductsModule } from './order-products/order-products.module'
+export { OrderProductAddonsModule } from './order-product-addons/order-product-addons.module'
+export { OrderProductOptionsModule } from './order-product-options/order-product-options.module'
