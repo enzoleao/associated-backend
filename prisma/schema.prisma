@@ -291,20 +291,35 @@ model OrderProductOptions {
 model Client {
   id           String    @id @default(uuid())
   name         String
-  phone_number String
+  email        String    @unique
+  phone_number String    @unique
   created_at   DateTime  @default(now())
   updated_at   DateTime? @updatedAt
 
-  address ClientAddress[]
-  orders  Orders[]
+  address                   ClientAddress[]
+  orders                    Orders[]
+  clientAuthenticationCodes ClientAuthenticationCodes[]
 
   @@map("clients")
+}
+
+model ClientAuthenticationCodes {
+  id              String    @id @default(uuid())
+  client_id       String
+  code            String
+  expiration_date DateTime
+  created_at      DateTime  @default(now())
+  updated_at      DateTime? @updatedAt
+
+  client Client @relation(fields: [client_id], references: [id])
+
+  @@map("client_authentication_codes")
 }
 
 model ClientAddress {
   id                  String    @id @default(uuid())
   client_id           String
-  address_description String
+  address_description String?
   latitude            String
   longitude           String
   created_at          DateTime  @default(now())
