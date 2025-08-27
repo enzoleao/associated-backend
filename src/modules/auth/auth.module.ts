@@ -5,6 +5,7 @@ import { PrismaService } from '@/modules/prisma/prisma.service';
 import { AuthController } from '@/modules/auth/controllers/auth.controller';
 import { UserSigningUseCase } from '@/modules/auth/use-cases/user-signing/user-signing.usecase';
 import { UsersModule } from '@/modules';
+import { ClientCodeRequestUseCase } from './use-cases/client-code/client-code.usecase';
 
 @Global()
 @Module({
@@ -17,6 +18,6 @@ import { UsersModule } from '@/modules';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, PrismaService, UserSigningUseCase],
+  providers: [JwtStrategy, PrismaService, UserSigningUseCase, ClientCodeRequestUseCase],
 })
 export class AuthModule {}
