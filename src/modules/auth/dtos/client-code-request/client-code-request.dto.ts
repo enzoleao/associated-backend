@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsPhoneNumber, MinLength, ValidateIf } from 'class-validator';
+import { IsEmail, IsPhoneNumber, IsString, MinLength, ValidateIf } from 'class-validator';
 
 export class ClientCodeRequestDto {
   @ApiProperty({ required: false })
@@ -11,4 +11,11 @@ export class ClientCodeRequestDto {
   @IsEmail({}, { message: 'E-mail inválido' })
   @ValidateIf((o) => !o.phone_number)
   email?: string;
+
+  @ApiProperty()
+  @IsString({ message: 'Devera ser enviado o nome' })
+  name: string;
+
+
+  
 }

@@ -6,4 +6,5 @@ export const ErrorMessages = {
   authenticationFail: 'E-mail ou senha estão inválidos',
   userIdConflictId: 'Você não possui permissão para atualizar o usuário',
   invalidToken: 'Token expirado',
+  invalidCode: 'Codigo invalido'
 };

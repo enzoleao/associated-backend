@@ -13,6 +13,10 @@ import {
 } from '@/modules';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { JwtStrategy } from '@/modules/auth/strategy/jwt.strategy';
+import { RedisModule } from './modules/redis/redis.module';
+import { MetaModule } from './modules/meta/meta.module';
+import { PlataformModule } from './modules/plataform/plataform.module';
+import { QueueModule } from './modules/queue/queue.module';
 
 @Module({
   imports: [
@@ -25,7 +29,11 @@ import { JwtStrategy } from '@/modules/auth/strategy/jwt.strategy';
     OrdersModule,
     AddonsModule,
     OrderProductsModule,
-    OrderProductAddonsModule
+    OrderProductAddonsModule,
+    RedisModule,
+    MetaModule,
+    PlataformModule,
+    QueueModule
   ],
   providers: [PrismaService, JwtStrategy],
 })

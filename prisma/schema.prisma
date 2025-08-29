@@ -18,6 +18,16 @@ enum DiscountType {
   FIXED
 }
 
+model PlataformAuthenticationData {
+  id String @id @default(uuid())
+  provider String
+  provider_service String
+  meta_data Json?
+  authorization_token String
+
+  @@map("plataform_authentication_data")
+}
+
 model TenantStatus {
   id   Int    @id @default(autoincrement())
   name String
@@ -291,29 +301,15 @@ model OrderProductOptions {
 model Client {
   id           String    @id @default(uuid())
   name         String
-  email        String    @unique
-  phone_number String    @unique
+  email        String? @unique
+  phone_number String @unique
   created_at   DateTime  @default(now())
   updated_at   DateTime? @updatedAt
 
-  address                   ClientAddress[]
-  orders                    Orders[]
-  clientAuthenticationCodes ClientAuthenticationCodes[]
+  address ClientAddress[]
+  orders  Orders[]
 
   @@map("clients")
-}
-
-model ClientAuthenticationCodes {
-  id              String    @id @default(uuid())
-  client_id       String
-  code            String
-  expiration_date DateTime
-  created_at      DateTime  @default(now())
-  updated_at      DateTime? @updatedAt
-
-  client Client @relation(fields: [client_id], references: [id])
-
-  @@map("client_authentication_codes")
 }
 
 model ClientAddress {
