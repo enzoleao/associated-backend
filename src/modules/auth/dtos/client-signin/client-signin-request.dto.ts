@@ -4,7 +4,7 @@ import { IsString, MinLength } from 'class-validator';
 export class ClientSigninRequestDto {
   @ApiProperty()
   @IsString({ message: 'Telefone invalido' })
-  phone_number?: string;
+  phone_number: string;
 
   @ApiProperty()
   @IsString({ message: 'Codigo invalido' })
