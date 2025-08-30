@@ -43,7 +43,9 @@ export class ClientSigninUseCase {
           client: {
             ...client
           },
-          authorization: token
+          authorization: {
+            token: token
+          }
         }
       };
     } catch (error) {

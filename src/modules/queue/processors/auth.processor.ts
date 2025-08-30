@@ -14,7 +14,9 @@ export class AuthQueueProcessor  {
   async process(job: Job<any>): Promise<any> {
     const { phone, code } = job.data;
     try {
-      await this.whatsappService.sendTemplateMessage({to: phone, message: code})
+      if (process.env.ENV === 'PROD') await this.whatsappService.sendTemplateMessage({to: phone, message: code})
+
+        await this.whatsappService.sendMessage({to: phone, message: code})
       return { success: true };
     } catch (err) {
       throw err;

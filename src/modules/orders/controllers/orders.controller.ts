@@ -16,7 +16,7 @@ export class OrdersController {
   @Endpoint({
     method: 'POST',
     summary: 'Create Order.',
-    isProtectedRoute: false,
+    isProtectedRoute: true,
   })
   async createUser(@Body() createUserRequestDto: CreateOrderRequestDto) {
     return this.createOrderUseCase.execute(createUserRequestDto)

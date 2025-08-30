@@ -11,6 +11,8 @@ type JwtPayload = {
   userId: string;
   email: string;
   tenantId: string;
+  client_token?: string;
+  client?: string
 };
 
 type RoleWithPermissions = {
@@ -35,22 +37,28 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(req: Request, payload: JwtPayload) {
-    const { userId, tenantId } = payload;
+    const { userId, tenantId, client_token, client } = payload;
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if (tenantId !== req.headers.tenant_id) {
+    if (tenantId !== req.headers.tenant_id && client_token !== true) {
       return this.throwUnauthorizedError();
     }
-    this.setUserIdContext(userId);
-
-    //const permissions = await this.findUserRolePermissions(userId);
-
+    if (userId) {
+      this.setUserIdContext(userId);
+    }
+    if (client) {
+      this.setClientIdContext(client);
+    }
     return true;
   }
 
   private setUserIdContext(userId: string): void {
     this.cls.set('userId', userId);
+  }
+
+  private setClientIdContext(clientId: string): void {
+    this.cls.set('clientId', clientId);
   }
 
   private throwUnauthorizedError(): never {

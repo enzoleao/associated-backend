@@ -15,7 +15,7 @@ export class UsersController {
   @Endpoint({
     method: 'POST',
     summary: 'Create User.',
-    isProtectedRoute: true,
+    isProtectedRoute: false,
   })
   async createUser(@Body() createUserRequestDto: CreateUserRequestDto) {
     return this.formatResponseWithMessage(
