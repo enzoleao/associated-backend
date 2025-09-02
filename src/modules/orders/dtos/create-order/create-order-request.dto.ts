@@ -56,6 +56,11 @@ export class CreateOrderRequestDto {
   @IsString()
   delivery_type: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  address_id: string;
+
   @ApiProperty({ type: [ProductDto] })
   @IsArray()
   @ValidateNested({ each: true })

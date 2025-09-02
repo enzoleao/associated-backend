@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { OrdersController } from './controllers/orders.controller';
-import { CreateOrderUseCase } from './use-cases/create-order/create-order.usecase';
 import { ProductsModule } from '../products/products.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddonsModule } from '../addons/addons.module';
@@ -10,6 +9,7 @@ import { OrderProductAddonsModule } from '../order-product-addons/order-product-
 import { OrderProductOptionsModule } from '../order-product-options/order-product-options.module';
 import { OrderSummaryCalculatorService } from './services/order-summary-calculator/order-summary-calculator.service';
 import { OrderProductCreatorService } from './services/order-product-creator/order-product-creator.service';
+import { CreateOrderUseCase } from './use-cases';
 
 @Module({
   imports:[ProductsModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, OrderProductOptionsModule],
