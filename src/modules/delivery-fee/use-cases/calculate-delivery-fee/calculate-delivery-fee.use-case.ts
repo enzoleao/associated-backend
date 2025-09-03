@@ -1,5 +1,4 @@
-import { calculateDistance } from '@/common/utils';
-import { GetClientAddressesUseCase, GetClientAddressUseCase } from '@/modules/client-address/use-cases';
+import { GetClientAddressUseCase } from '@/modules/client-address/use-cases';
 import { MapBoxService } from '@/modules/mapbox/services/mapbox.service';
 import { GetDeliveryFeeUseCase } from '@/modules/tenant-delivery-fee/use-cases';
 import { GetTenantAddressUseCase } from '@/modules/tenants/use-cases';
