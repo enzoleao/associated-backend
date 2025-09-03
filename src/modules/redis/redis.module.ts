@@ -14,7 +14,18 @@ import Redis from 'ioredis';
           port,
           username: process.env.REDIS_USER || undefined,
           password: process.env.REDIS_PASSWORD || undefined,
-          tls: process.env.REDIS_TLS === 'true' ? {} : undefined, // se seu provider exigir TLS
+          tls: process.env.REDIS_TLS === 'true' ? {} : undefined,
+          retryStrategy: (times) => {
+            return Math.min(times * 100, 2000);
+          },
+          reconnectOnError: (err) => {
+            const targetErrors = ['READONLY', 'ECONNRESET', 'ETIMEDOUT'];
+            if (targetErrors.some(e => err.message.includes(e))) {
+              return true;
+            }
+            return false;
+          },
+          maxRetriesPerRequest: 3,
         });
       },
     },
