@@ -1,5 +1,5 @@
 import { BadRequestException, HttpStatus } from '@nestjs/common';
-import { ErrorMessages } from '@/common/messages';
+import { ErrorMessages } from '../messages/error-messages';
 
 type HttpStatusType =
   | 'BAD_REQUEST'

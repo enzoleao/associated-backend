@@ -3,9 +3,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ClsService } from 'nestjs-cls';
 import { CustomBadRequestException } from '@/common/exceptions';
-import { ErrorMessages } from '@/common/messages';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { Permission } from '@prisma/client';
+import { ErrorMessages } from '@/common/messages/error-messages';
 
 type JwtPayload = {
   userId: string;

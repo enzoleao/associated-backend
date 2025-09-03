@@ -54,6 +54,7 @@ model Tenant {
   promotions Promotion[]
   addons     Addon[]
   orders     Orders[]
+  tenantDeliveryFee TenantDeliveryFee[]
 
   @@map("tenants")
 }
@@ -329,4 +330,18 @@ model ClientAddress {
   orders Orders[]
 
   @@map("client_address")
+}
+
+model TenantDeliveryFee {
+  id           String    @id @default(uuid())
+  tenant_id    String
+  max_distance Float
+  price        Float
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+
+  tenant Tenant   @relation(fields: [tenant_id], references: [id])
+
+
+  @@map("tenant_delivery_fee")
 }

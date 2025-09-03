@@ -4,7 +4,9 @@ import {
   BadRequestException,
   HttpStatus,
 } from '@nestjs/common';
-import { ErrorMessages, FieldNames, ValidationMessages } from '../messages';
+import { ErrorMessages } from '../messages/error-messages';
+import { ValidationMessages } from '../messages/validation-messages';
+import { FieldNames } from '../messages/field-names';
 
 export class CustomValidationPipe extends ValidationPipe {
   constructor() {

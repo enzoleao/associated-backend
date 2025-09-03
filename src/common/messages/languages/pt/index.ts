@@ -23,7 +23,4 @@ export const SuccessMessagesPT = {
   general: {
     success: 'Solicitação concluída com sucesso',
   },
-  address: {
-    created: 'Endereço cadastrado com sucesso'
-  }
 };
