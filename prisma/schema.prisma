@@ -49,11 +49,11 @@ model Tenant {
   address TenantAddress? @relation(fields: [tenant_address_id], references: [id])
   status  TenantStatus?  @relation(fields: [tenant_status_id], references: [id])
 
-  users      User[]
-  products   Product[]
-  promotions Promotion[]
-  addons     Addon[]
-  orders     Orders[]
+  users             User[]
+  products          Product[]
+  promotions        Promotion[]
+  addons            Addon[]
+  orders            Orders[]
   tenantDeliveryFee TenantDeliveryFee[]
 
   @@map("tenants")
@@ -104,6 +104,7 @@ model Product {
   description         String?
   price               Float
   is_optional         Boolean   @default(false)
+  is_active           Boolean   @default(true)
   image_path          String?
   creator_user_id     String
   updater_user_id     String?
@@ -146,10 +147,12 @@ model Promotion {
 }
 
 model ProductCategory {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
 
   products Product[]
 
@@ -340,8 +343,7 @@ model TenantDeliveryFee {
   created_at   DateTime  @default(now())
   updated_at   DateTime? @updatedAt
 
-  tenant Tenant   @relation(fields: [tenant_id], references: [id])
-
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
 
   @@map("tenant_delivery_fee")
 }
