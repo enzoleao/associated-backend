@@ -10,9 +10,10 @@ import { OrderProductOptionsModule } from '../order-product-options/order-produc
 import { OrderSummaryCalculatorService } from './services/order-summary-calculator/order-summary-calculator.service';
 import { OrderProductCreatorService } from './services/order-product-creator/order-product-creator.service';
 import { CreateOrderUseCase } from './use-cases';
+import { DeliveryFeeModule } from '../delivery-fee/delivery-fee.module';
 
 @Module({
-  imports:[ProductsModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, OrderProductOptionsModule],
+  imports:[ProductsModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, OrderProductOptionsModule, DeliveryFeeModule],
   controllers: [OrdersController],
   providers: [CreateOrderUseCase, PrismaService, OrdersRepository, OrderSummaryCalculatorService, OrderProductCreatorService],
 })

@@ -5,6 +5,7 @@ import { GetProductsByIdUseCase } from "@/modules/products/use-cases/get-product
 import { OrdersRepository } from "../../repositories/implementation/orders.repository";
 import { OrderSummaryCalculatorService } from "../../services/order-summary-calculator/order-summary-calculator.service";
 import { OrderProductCreatorService } from "../../services/order-product-creator/order-product-creator.service";
+import { CalculateDeliveryFeeUseCase } from "@/modules/delivery-fee/use-cases";
 
 @Injectable()
 export class CreateOrderUseCase {
@@ -13,10 +14,11 @@ export class CreateOrderUseCase {
     private readonly getAddonsById: GetAddonsByIdUseCase,
     private readonly orderRepository: OrdersRepository,
     private readonly summaryCalculator: OrderSummaryCalculatorService,
-    private readonly orderProductFactory: OrderProductCreatorService
+    private readonly orderProductFactory: OrderProductCreatorService,
+    private readonly calculateDeliveryFeeUseCase: CalculateDeliveryFeeUseCase
   ) {}
 
-  async execute({ products }: CreateOrderRequestDto) {
+  async execute({ products, address_id }: CreateOrderRequestDto) {
     const { productIds, addonIds } = this.summaryCalculator.extractIds(products);
 
     const [productsResponse, addonsResponse] = await Promise.all([
@@ -31,19 +33,19 @@ export class CreateOrderUseCase {
       products, productMap, addonMap
     );
 
+    const delivery_fee = await this.calculateDeliveryFeeUseCase.execute(address_id)
+
     const { id } = await this.orderRepository.createOrder({
       sub_total: subtotal,
       total: total,
       discount: discount_total,
+      delivery_fee: delivery_fee.price ?? null
     });
 
     await this.orderProductFactory.createAll(products, id);
 
     return { 
         id: id,
-        resume: {
-            subtotal, discount_total, total 
-        }
     };
   }
 }

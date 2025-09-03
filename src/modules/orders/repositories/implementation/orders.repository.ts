@@ -13,7 +13,7 @@ export class OrdersRepository implements IOrdersRepository {
 
   ) {}
 
-  async createOrder({total, sub_total, discount }: ICreateOrder): Promise<Orders>{
+  async createOrder({ total, sub_total, discount, delivery_fee, address_id }: ICreateOrder): Promise<Orders>{
 
     const clientId = await this.cls.get('clientId')
     return this.prismaService.tenantQuery('orders', 'create', {
@@ -22,7 +22,8 @@ export class OrdersRepository implements IOrdersRepository {
             sub_total,
             discount,
             client_id: clientId,
-            delivery_fee: 10
+            delivery_fee,
+            address_id
         }
     })
    }

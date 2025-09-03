@@ -11,5 +11,6 @@ import { TenantDeliveryFeeModule } from '../tenant-delivery-fee/tenant-delivery-
   imports: [TenantsModule, ClientAddressModule, MapboxModule, TenantDeliveryFeeModule],
   controllers: [DeliveryFeeController],
   providers: [DeliveryFeeRepository, CalculateDeliveryFeeUseCase],
+  exports: [CalculateDeliveryFeeUseCase]
 })
 export class DeliveryFeeModule {}
