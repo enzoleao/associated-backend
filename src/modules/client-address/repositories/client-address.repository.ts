@@ -3,4 +3,5 @@ import { CreateClientAddressRequestDto } from "../dtos/create-client-address/cre
 
 export interface IClientAddressRepository {
   createClientAddress(order: CreateClientAddressRequestDto): Promise<ClientAddress>;
+  getClientAddress(id: string): Promise<ClientAddress | null>
 }

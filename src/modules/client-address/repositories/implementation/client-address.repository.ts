@@ -22,6 +22,14 @@ export class ClientAddressRepository implements IClientAddressRepository {
         })
     }
 
+    async getClientAddress(id: string): Promise<ClientAddress | null>{
+        return this.prismaService.clientAddress.findUnique({
+            where: {
+                id
+            }
+        })
+    }
+
     async createClientAddress({latitude, longitude, neighborhood, number, description}: CreateClientAddressRequestDto): Promise<ClientAddress> {
         const client_id = await this.cls.get('clientId')
         return this.prismaService.clientAddress.create({

@@ -47,20 +47,23 @@ export class ${className}Module {}
 const controllerTemplate = `import { Controller } from '@nestjs/common';
 
 @Controller('${fileName}')
-export class ${className}Controller {}
+export class ${className}Controller {
+  constructor(){}
+}
 `;
 
 const repositoryTemplate = `import { Injectable } from '@nestjs/common';
 
-@Injectable()
-export class I${className}Repository {}
+export interface I${className}Repository {}
 `;
 
 const repositoryImplTemplate = `import { Injectable } from '@nestjs/common';
 import { I${className}Repository } from '../${fileName}.repository';
 
 @Injectable()
-export class ${className}Repository implements I${className}Repository {}
+export class ${className}Repository implements I${className}Repository {
+  constructor(){}
+}
 `;
 
 // --- Criação de arquivos ---

@@ -33,6 +33,7 @@ const useCaseTemplate = `import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ${useCaseClassName} {
+  constructor(){}
   execute() {
     // lógica do use-case
   }

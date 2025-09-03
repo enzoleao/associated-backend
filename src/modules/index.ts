@@ -14,3 +14,6 @@ export { QueueModule } from './queue/queue.module'
 export { RedisModule } from './redis/redis.module'
 export { ClientAddressModule } from './client-address/client-address.module'
 export { PlataformModule } from './plataform/plataform.module'
+export { DeliveryFeeModule } from './delivery-fee/delivery-fee.module';
+export { MapboxModule } from './mapbox/mapbox.module';
+export { TenantDeliveryFeeModule } from './tenant-delivery-fee/tenant-delivery-fee.module';
