@@ -17,3 +17,4 @@ export { PlataformModule } from './plataform/plataform.module'
 export { DeliveryFeeModule } from './delivery-fee/delivery-fee.module';
 export { MapboxModule } from './mapbox/mapbox.module';
 export { TenantDeliveryFeeModule } from './tenant-delivery-fee/tenant-delivery-fee.module';
+export { OrderStatusModule } from './order-status/order-status.module';
