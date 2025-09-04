@@ -18,3 +18,4 @@ export { DeliveryFeeModule } from './delivery-fee/delivery-fee.module';
 export { MapboxModule } from './mapbox/mapbox.module';
 export { TenantDeliveryFeeModule } from './tenant-delivery-fee/tenant-delivery-fee.module';
 export { OrderStatusModule } from './order-status/order-status.module';
+export { ProductCategoriesModule } from './product-categories/product-categories.module';

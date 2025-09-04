@@ -13,7 +13,8 @@ export class OrderStatusRepository implements IOrderStatusRepository {
     return this.prismaService.orderStatus.findMany({
       where: {
         name: {
-          contains: query.search_term
+          contains: query.search_term,
+          mode: 'insensitive',
         }
       }
     })
