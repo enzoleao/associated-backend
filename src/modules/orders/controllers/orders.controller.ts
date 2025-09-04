@@ -3,15 +3,16 @@ import { Endpoint } from '@/common/decorators/endpoint';
 import { formatResponse } from '@/common/helpers/format-response';
 import { CreateOrderRequestDto } from '../dtos/create-order/create-order-request.dto';
 import { CreateOrderUseCase } from '../use-cases/create-order/create-order.usecase';
-import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
-import { GetOrdersUseCase } from '../use-cases';
+import { GetOrdersUseCase, UpdateOrderStatusUseCase } from '../use-cases';
 import { GetOrdersParamsRequestDto } from '../dtos/get-orders/get-orders-request.dto';
+import { UpdateOrderStatusRequestDto } from '../dtos/update-order-status/update-order-status-request.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(
     private readonly createOrderUseCase: CreateOrderUseCase,
-    private readonly getOrdersUseCase: GetOrdersUseCase
+    private readonly getOrdersUseCase: GetOrdersUseCase,
+    private readonly updateOrderStatusUseCase: UpdateOrderStatusUseCase
   ){}
 
   private formatResponseWithMessage<T>(message: string, data: T) {
@@ -34,4 +35,20 @@ export class OrdersController {
   async createOrder(@Body() createUserRequestDto: CreateOrderRequestDto) {
     return this.createOrderUseCase.execute(createUserRequestDto)
   }
+  
+  @Endpoint({
+    method: 'PUT',
+    route: ':id',
+    summary: 'Update Order Status.',
+    isProtectedRoute: true,
+  })
+  async updateOrderStatus(
+    @Param('id') id: string,
+    @Body() updateOrderStatusDto: UpdateOrderStatusRequestDto
+  ) {
+    const { order_status_id } = updateOrderStatusDto
+    return this.updateOrderStatusUseCase.execute({order_status_id, id })
+  }
+
+
 }

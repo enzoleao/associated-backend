@@ -9,12 +9,12 @@ import { OrderProductAddonsModule } from '../order-product-addons/order-product-
 import { OrderProductOptionsModule } from '../order-product-options/order-product-options.module';
 import { OrderSummaryCalculatorService } from './services/order-summary-calculator/order-summary-calculator.service';
 import { OrderProductCreatorService } from './services/order-product-creator/order-product-creator.service';
-import { CreateOrderUseCase, GetOrdersUseCase } from './use-cases';
+import { CreateOrderUseCase, GetOrdersUseCase, UpdateOrderStatusUseCase } from './use-cases';
 import { DeliveryFeeModule } from '../delivery-fee/delivery-fee.module';
 
 @Module({
   imports:[ProductsModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, OrderProductOptionsModule, DeliveryFeeModule],
   controllers: [OrdersController],
-  providers: [CreateOrderUseCase, PrismaService, OrdersRepository, OrderSummaryCalculatorService, OrderProductCreatorService, GetOrdersUseCase],
+  providers: [CreateOrderUseCase, PrismaService, OrdersRepository, OrderSummaryCalculatorService, OrderProductCreatorService, GetOrdersUseCase, UpdateOrderStatusUseCase],
 })
 export class OrdersModule {}

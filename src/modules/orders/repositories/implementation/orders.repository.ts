@@ -7,6 +7,7 @@ import { ClsService } from 'nestjs-cls';
 import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
 import { paginate } from '@/common/helpers/paginate';
 import { GetOrdersParamsRequestDto } from '../../dtos/get-orders/get-orders-request.dto';
+import { IUpdateOrderStatus } from '../../interfaces/update-order-status.interface';
 
 @Injectable()
 export class OrdersRepository implements IOrdersRepository {
@@ -15,6 +16,16 @@ export class OrdersRepository implements IOrdersRepository {
     private readonly cls: ClsService,
 
   ) {}
+  updateOrderStatusId({id, order_status_id }: IUpdateOrderStatus): Promise<Partial<Orders>> {
+    return this.prismaService.tenantQuery('orders', 'update', {
+      where: {
+        id
+      },
+      data: {
+        order_status_id
+      }
+    })
+  }
 
   async getOrders(paginationQueryDto: GetOrdersParamsRequestDto): Promise<any> {
    const {  search_term, order_status_id } = paginationQueryDto;
