@@ -39,7 +39,8 @@ export class CreateOrderUseCase {
       sub_total: subtotal,
       total: total,
       discount: discount_total,
-      delivery_fee: delivery_fee.price ?? null
+      delivery_fee: delivery_fee.price ?? null,
+      address_id
     });
 
     await this.orderProductFactory.createAll(products, id);

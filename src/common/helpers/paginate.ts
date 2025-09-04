@@ -1,12 +1,21 @@
 import { PrismaModel, PrismaService } from '@/modules/prisma/prisma.service';
 import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
 
-export async function paginate<T>(
-  prisma: PrismaService,
-  model: PrismaModel,
-  args: PaginationQueryDto,
-  searchFields: string[] = [],
-): Promise<{
+interface PaginateOptions<T> {
+  prisma: PrismaService;
+  model: PrismaModel;
+  args: PaginationQueryDto;
+  searchFields?: string[];
+  select?: Record<string, any>;
+}
+
+export async function paginate<T>({
+  prisma,
+  model,
+  args,
+  searchFields = [],
+  select,
+}: PaginateOptions<T>): Promise<{
   data: T[];
   meta: {
     page: number;
@@ -26,12 +35,25 @@ export async function paginate<T>(
   };
 
   if (args.search_term && searchFields.length) {
-    where.OR = searchFields.map((field) => ({
-      [field]: {
-        contains: args.search_term,
-        mode: 'insensitive',
-      },
-    }));
+    where.OR = searchFields.map((field) => {
+      if (field.includes('.')) {
+        const [relation, column] = field.split('.');
+        return {
+          [relation]: {
+            [column]: {
+              contains: args.search_term,
+              mode: 'insensitive',
+            },
+          },
+        };
+      }
+      return {
+        [field]: {
+          contains: args.search_term,
+          mode: 'insensitive',
+        },
+      };
+    });
   }
 
   const [data, totalItems] = await Promise.all([
@@ -40,6 +62,7 @@ export async function paginate<T>(
       skip,
       take: perPage,
       orderBy: args.order_by ?? { created_at: 'desc' },
+      select,
     }),
     prisma.tenantQuery<number>(model, 'count', { where }),
   ]);

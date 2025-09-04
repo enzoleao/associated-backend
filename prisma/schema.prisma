@@ -205,7 +205,7 @@ model Addon {
   updated_at DateTime? @updatedAt
 
   product      ProductHasAddons[]
-  orderProduct OrderProductAddons[]
+  order_product OrderProductAddons[]
   tenant       Tenant               @relation(fields: [tenant_id], references: [id])
 
   @@map("addons")
@@ -247,11 +247,11 @@ model Orders {
   created_at        DateTime  @default(now())
   updated_at        DateTime? @updatedAt
 
-  product       OrderHasProducts[]
+  products       OrderHasProducts[]
   tenant        Tenant             @relation(fields: [tenant_id], references: [id])
   client        Client             @relation(fields: [client_id], references: [id])
-  orderStatus   OrderStatus        @relation(fields: [order_status_id], references: [id])
-  clientAddress ClientAddress?     @relation(fields: [client_address_id], references: [id])
+  order_status   OrderStatus        @relation(fields: [order_status_id], references: [id])
+  client_address ClientAddress?     @relation(fields: [client_address_id], references: [id])
 
   @@map("orders")
 }
