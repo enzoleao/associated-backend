@@ -23,11 +23,12 @@ import {
 } from '@/modules';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { JwtStrategy } from '@/modules/auth/strategy/jwt.strategy';
+import { BullConfigModule } from './modules/bull/bull.module';
 
 
 
 @Module({
-  imports: [ProductsModule, UsersModule, ContextModule, AuthModule, StorageModule, TenantsModule, OrdersModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, RedisModule, MetaModule, PlataformModule, QueueModule, ClientAddressModule, DeliveryFeeModule, MapboxModule, TenantDeliveryFeeModule, OrderStatusModule, ProductCategoriesModule],
+  imports: [ProductsModule, UsersModule, ContextModule, AuthModule, StorageModule, TenantsModule, OrdersModule, AddonsModule, OrderProductsModule, OrderProductAddonsModule, RedisModule, MetaModule, PlataformModule, QueueModule, ClientAddressModule, DeliveryFeeModule, MapboxModule, TenantDeliveryFeeModule, OrderStatusModule, ProductCategoriesModule, BullConfigModule],
   providers: [PrismaService, JwtStrategy],
 })
 export class AppModule implements NestModule {

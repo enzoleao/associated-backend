@@ -3,10 +3,14 @@ import { Product, Promotion } from '@prisma/client';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { IProductRepository } from '@/modules/products/repositories/product.repository';
 import { PaginationQueryDto } from '@/common/dtos/pagination-query.dto';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class ProductRepository implements IProductRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly cls: ClsService,
+  ) {}
 
   async createProduct(product: Partial<Product>): Promise<Product> {
     return this.prismaService.tenantAndAuditoryQuery('product', 'create', {
@@ -17,11 +21,16 @@ export class ProductRepository implements IProductRepository {
   }
 
   async getProductGrouped(query: PaginationQueryDto) {
+    const tenant_id = await this.cls.get('tenantId');
+
     return this.prismaService.productCategory.findMany({
       select: {
         id: true,
         name: true,
         products: {
+          where: {
+            tenant_id,
+          },
           select: {
             id: true,
             name: true,
@@ -41,7 +50,9 @@ export class ProductRepository implements IProductRepository {
       },
       where: {
         products: {
-          some: {},
+          some: {
+            tenant_id, 
+          },
         },
       },
     });
