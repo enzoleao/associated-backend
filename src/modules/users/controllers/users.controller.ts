@@ -16,7 +16,6 @@ export class UsersController {
   @Endpoint({
     method: 'POST',
     summary: 'Create User.',
-    isProtectedRoute: true,
   })
   async createUser(@Body() createUserRequestDto: CreateUserRequestDto) {
     const data = await this.createUserUseCase.execute(createUserRequestDto);

@@ -1,1 +1,0 @@
-export { CreateProductRequestDto } from './create-product/create-product-request.dto'

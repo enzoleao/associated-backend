@@ -13,65 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum DiscountType {
-  PERCENTAGE
-  FIXED
-}
-
-model PlataformAuthenticationData {
-  id                  String @id @default(uuid())
-  provider            String
-  provider_service    String
-  meta_data           Json?
-  authorization_token String
-
-  @@map("plataform_authentication_data")
-}
-
-model TenantStatus {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  tenants Tenant[]
-
-  @@map("tenant_status")
-}
-
 model Tenant {
-  id                String   @id @default(uuid())
-  tenant_address_id String?
-  tenant_status_id  Int?
-  name              String?
-  is_open           Boolean  @default(false)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  cnpj       String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  address TenantAddress? @relation(fields: [tenant_address_id], references: [id])
-  status  TenantStatus?  @relation(fields: [tenant_status_id], references: [id])
-
-  users             User[]
-  products          Product[]
-  promotions        Promotion[]
-  addons            Addon[]
-  orders            Orders[]
-  tenantDeliveryFee TenantDeliveryFee[]
+  users User[]
 
   @@map("tenants")
-}
-
-model TenantAddress {
-  id           String    @id @default(uuid())
-  street       String
-  neighborhood String
-  number       String?
-  longitude    String
-  latitude     String
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-
-  tenants Tenant[]
-
-  @@map("tenant_address")
 }
 
 model User {
@@ -80,83 +31,28 @@ model User {
   name       String
   initials   String
   email      String    @unique
+  color      String?
   password   String
   role_id    Int
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  tenant            Tenant      @relation(fields: [tenant_id], references: [id])
-  role              Role        @relation(fields: [role_id], references: [id])
-  createdProducts   Product[]   @relation("CreatedProducts")
-  updatedProducts   Product[]   @relation("UpdatedProducts")
-  createdPromotions Promotion[] @relation("CreatedPromotions")
-  updatedPromotions Promotion[] @relation("UpdatedPromotions")
+  role                Role                 @relation(fields: [role_id], references: [id])
+  tenant              Tenant               @relation(fields: [tenant_id], references: [id])
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
 
-model Product {
-  id                  String    @id @default(uuid())
-  tenant_id           String
-  product_category_id Int
-  promotion_id        String?
-  name                String
-  description         String?
-  price               Float
-  is_optional         Boolean   @default(false)
-  is_active           Boolean   @default(true)
-  image_path          String?
-  creator_user_id     String
-  updater_user_id     String?
-  created_at          DateTime  @default(now())
-  updated_at          DateTime? @updatedAt
+model Associate {
+  id              String    @id @default(uuid())
+  name            String
+  birthday        DateTime  @db.Date
+  membership_date DateTime  @db.Date
+  created_at      DateTime  @default(now())
+  updated_at      DateTime? @updatedAt
 
-  tenant          Tenant                @relation(fields: [tenant_id], references: [id])
-  category        ProductCategory       @relation(fields: [product_category_id], references: [id])
-  promotion       Promotion?            @relation(fields: [promotion_id], references: [id])
-  creator         User                  @relation("CreatedProducts", fields: [creator_user_id], references: [id])
-  updater         User?                 @relation("UpdatedProducts", fields: [updater_user_id], references: [id])
-  addon           ProductHasAddons[]
-  order           OrderHasProducts[]
-  productsOptions OrderProductOptions[]
-
-  @@map("products")
-}
-
-model Promotion {
-  id              String       @id @default(uuid())
-  tenant_id       String
-  title           String
-  discount_type   DiscountType
-  value           Decimal
-  start_date      DateTime
-  end_date        DateTime
-  is_active       Boolean
-  creator_user_id String
-  updater_user_id String?
-  created_at      DateTime     @default(now())
-  updated_at      DateTime?    @updatedAt
-
-  tenant            Tenant             @relation(fields: [tenant_id], references: [id])
-  creator           User               @relation("CreatedPromotions", fields: [creator_user_id], references: [id])
-  updater           User?              @relation("UpdatedPromotions", fields: [updater_user_id], references: [id])
-  products          Product[]
-  ordersHasProducts OrderHasProducts[]
-
-  @@map("promotions")
-}
-
-model ProductCategory {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String?
-  is_active   Boolean   @default(true)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
-
-  products Product[]
-
-  @@map("product_categories")
+  @@map("associates")
 }
 
 model Role {
@@ -195,155 +91,17 @@ model RolesHasPermissions {
   @@map("roles_has_permissions")
 }
 
-model Addon {
+model PasswordResetToken {
   id         String    @id @default(uuid())
-  tenant_id  String
-  name       String
-  price      Float
-  image_path String?
+  token      String    @unique
+  user_id    String
+  expires_at DateTime
+  used_at    DateTime?
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  product      ProductHasAddons[]
-  order_product OrderProductAddons[]
-  tenant       Tenant               @relation(fields: [tenant_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
 
-  @@map("addons")
-}
 
-model ProductHasAddons {
-  product_id String
-  addon_id   String
-
-  product Product @relation(fields: [product_id], references: [id])
-  addon   Addon   @relation(fields: [addon_id], references: [id])
-
-  @@id([product_id, addon_id])
-  @@map("product_has_addons")
-}
-
-model OrderStatus {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique
-  color      String?
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
-
-  orders Orders[]
-
-  @@map("order_status")
-}
-
-model Orders {
-  id                String    @id @default(uuid())
-  tenant_id         String
-  client_address_id String?
-  client_id         String
-  order_status_id   Int       @default(1)
-  discount          Float?
-  sub_total         Float
-  delivery_fee      Float
-  total             Float
-  created_at        DateTime  @default(now())
-  updated_at        DateTime? @updatedAt
-
-  products       OrderHasProducts[]
-  tenant        Tenant             @relation(fields: [tenant_id], references: [id])
-  client        Client             @relation(fields: [client_id], references: [id])
-  order_status   OrderStatus        @relation(fields: [order_status_id], references: [id])
-  client_address ClientAddress?     @relation(fields: [client_address_id], references: [id])
-
-  @@map("orders")
-}
-
-model OrderHasProducts {
-  id           String    @id @default(uuid())
-  product_id   String
-  order_id     String
-  client_note  String?
-  promotion_id String?
-  quantity     Int
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-
-  product   Product    @relation(fields: [product_id], references: [id])
-  order     Orders     @relation(fields: [order_id], references: [id])
-  promotion Promotion? @relation(fields: [promotion_id], references: [id])
-
-  addons  OrderProductAddons[]
-  options OrderProductOptions[]
-
-  @@map("order_has_products")
-}
-
-model OrderProductAddons {
-  id                   String    @id @default(uuid())
-  order_has_product_id String
-  addon_id             String
-  quantity             Int
-  created_at           DateTime  @default(now())
-  updated_at           DateTime? @updatedAt
-
-  orderHasProduct OrderHasProducts @relation(fields: [order_has_product_id], references: [id])
-  addon           Addon            @relation(fields: [addon_id], references: [id])
-
-  @@map("order_product_addons")
-}
-
-model OrderProductOptions {
-  id                   String    @id @default(uuid())
-  order_has_product_id String
-  product_id           String
-  quantity             Int
-  created_at           DateTime  @default(now())
-  updated_at           DateTime? @updatedAt
-
-  orderHasProduct OrderHasProducts @relation(fields: [order_has_product_id], references: [id])
-  product         Product          @relation(fields: [product_id], references: [id])
-
-  @@map("order_product_options")
-}
-
-model Client {
-  id           String    @id @default(uuid())
-  name         String
-  email        String?   @unique
-  phone_number String    @unique
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-
-  address ClientAddress[]
-  orders  Orders[]
-
-  @@map("clients")
-}
-
-model ClientAddress {
-  id           String    @id @default(uuid())
-  client_id    String
-  neighborhood String?
-  description  String?
-  number       String?
-  latitude     String
-  longitude    String
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-
-  client Client   @relation(fields: [client_id], references: [id])
-  orders Orders[]
-
-  @@map("client_address")
-}
-
-model TenantDeliveryFee {
-  id           String    @id @default(uuid())
-  tenant_id    String
-  max_distance Float
-  price        Float
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-
-  tenant Tenant @relation(fields: [tenant_id], references: [id])
-
-  @@map("tenant_delivery_fee")
+  @@map("password_reset_tokens")
 }

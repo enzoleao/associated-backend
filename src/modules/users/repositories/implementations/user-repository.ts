@@ -8,6 +8,17 @@ import { UserRolesEnum } from '@/common/enums/roles.enum';
 export class UserRepository implements IUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  resetPassword({ password, user_id }: { password: string; user_id: string; }): Promise<User> {
+    return this.prismaService.user.update({
+      where: {
+        id: user_id
+      },
+      data: {
+        password
+      }
+    })
+  }
+
   async createUser(user: Partial<User>): Promise<User> {
     return this.prismaService.connectTenantQuery('user', 'create', {
       data: {
@@ -22,8 +33,11 @@ export class UserRepository implements IUserRepository {
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    return this.prismaService.tenantQuery('user', 'findUnique', {
-      where: { email },
-    });
+    return this.prismaService.user.findUnique({
+      where: {
+        email
+      }
+    })
   }
+
 }

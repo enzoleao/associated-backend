@@ -1,19 +1,17 @@
 import { Body, Controller } from '@nestjs/common';
 import { Endpoint } from '@/common/decorators/endpoint';
 import { formatResponse } from '@/common/helpers/format-response';
-import { UserSigningRequestDto } from '@/modules/auth/dtos';
+import { ForgetPasswordRequestDto, UserSigningRequestDto } from '@/modules/auth/dtos';
 import { UserSigningUseCase } from '@/modules/auth/use-cases/user-signing/user-signing.usecase';
-import { ClientCodeRequestDto } from '../dtos/client-code-request/client-code-request.dto';
-import { ClientCodeRequestUseCase } from '../use-cases/client-code/client-code.usecase';
-import { ClientSigninUseCase } from '../use-cases/client-signin/client-signin.usecase';
-import { ClientSigninRequestDto } from '../dtos/client-signin/client-signin-request.dto';
+import { RegisterResetPasswordUseCase, ResetPasswordUseCase } from '../use-cases';
+import { ResetPasswordRequestDto } from '../dtos/reset-password/reset-password-request.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly userSigningUseCase: UserSigningUseCase, 
-    private readonly clientCodeRequestUseCase: ClientCodeRequestUseCase,
-    private readonly clientSigninUseCase: ClientSigninUseCase
+    private readonly registerResetPasswordUseCase: RegisterResetPasswordUseCase,
+    private readonly ResetPasswordUseCase: ResetPasswordUseCase
   ) {}
 
   private formatResponseWithMessage<T>(message: string, data: T) {
@@ -30,19 +28,23 @@ export class AuthController {
 
   @Endpoint({
     method: 'POST',
-    route: '/code-request',
-    summary: 'Auth Client.',
+    route: '/forget-password',
+    summary: 'Auth User.',
   })
-  clientCode(@Body() clientCodeRequest: ClientCodeRequestDto) {
-    return this.clientCodeRequestUseCase.execute(clientCodeRequest);
+  forgetPassword(@Body() forgetPasswordRequestDto: ForgetPasswordRequestDto) {
+    this.registerResetPasswordUseCase.execute({email: forgetPasswordRequestDto.email})
+    return {
+      message: "Caso você tenha registro, será enviado instruções para seu e-mail"
+    };
   }
-  
+
   @Endpoint({
     method: 'POST',
-    route: '/client',
-    summary: 'Auth Client.',
+    route: '/reset-password',
+    summary: 'Reset Password.',
   })
-  clientSignin(@Body() clientSignin: ClientSigninRequestDto) {
-    return this.clientSigninUseCase.execute(clientSignin);
+  resetPassword(@Body() resetPasswordRequestDto: ResetPasswordRequestDto) {
+    return this.ResetPasswordUseCase.execute(resetPasswordRequestDto)
   }
+
 }
