@@ -7,8 +7,8 @@ export class CreateAssociateUseCase {
   constructor(
     private readonly createUserAssociatedUseCase: CreateUserAssociatedUseCase
   ){}
-  async execute({ name, email, phone, rg, cpf, city, zip_code, profession_name, birthday, image_path }: CreateAssociateRequestDto) {
-    const userCreated = await this.createUserAssociatedUseCase.execute({name, email, phone, rg, cpf, profession_name, image_path, birthday })
+  async execute({ name, email, phone, rg, cpf, city, zip_code, profession_name, birthday, image_path, color }: CreateAssociateRequestDto) {
+    const userCreated = await this.createUserAssociatedUseCase.execute({name, email, phone, rg, cpf, profession_name, image_path, birthday, color })
     return userCreated
   }
 }

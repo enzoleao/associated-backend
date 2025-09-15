@@ -3,6 +3,7 @@ export interface ICreateUserAssociated {
   email: string;
   phone: string;
   cpf: string;
+  color: string;
   rg?: string;
   profession_name?: string;
   birthday: string;

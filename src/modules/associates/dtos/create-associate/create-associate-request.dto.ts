@@ -13,6 +13,10 @@ export class CreateAssociateRequestDto {
   @IsString()
   @IsOptional()
   image_path: string;
+  
+  @IsString()
+  @IsOptional()
+  color: string;
 
 
   @IsString()
