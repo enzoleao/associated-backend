@@ -1,7 +1,7 @@
 import {
   UsersPermissionSeeder,
 } from './seeders/permissions';
-import { RolesSeeder } from './seeders/starts';
+import { CountryStatessSeeder, PaymentsMethodsSeeder, RolesSeeder } from './seeders/starts';
 import { RolesPermisionSeeder } from './seeders/permissions/roles-permission.seeder';
 
 class Seeder {
@@ -12,6 +12,8 @@ class Seeder {
       new RolesSeeder(),
       new UsersPermissionSeeder(),
       new RolesPermisionSeeder(),
+      new PaymentsMethodsSeeder(),
+      new CountryStatessSeeder(),
     ];
   }
 

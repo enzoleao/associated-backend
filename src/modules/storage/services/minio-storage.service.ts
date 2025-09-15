@@ -30,19 +30,19 @@ export class MinioStorageService {
     key: string;
     contentType: string;
     expiresIn?: number;
-  }): Promise<{ uploadUrl: string; publicUrl: string }> {
+  }): Promise<{ upload_url: string; public_url: string }> {
     const command = new PutObjectCommand({
       Bucket: process.env.MINIO_BUCKET ?? '',
       Key: key,
       ContentType: contentType,
     });
-    const uploadUrl = await getSignedUrl(this.client, command, {
+    const upload_url = await getSignedUrl(this.client, command, {
       expiresIn,
     });
 
-    const publicUrl = `${process.env.MINIO_PUBLIC_URL}/${process.env.MINIO_BUCKET}/${key}`;
+    const public_url = `${process.env.MINIO_PUBLIC_URL}/${process.env.MINIO_BUCKET}${key}`;
 
-    return { uploadUrl, publicUrl };
+    return { upload_url, public_url };
   }
 
   async deleteFile(key: string): Promise<void> {

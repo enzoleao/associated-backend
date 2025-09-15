@@ -8,7 +8,6 @@ export class ContextMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     this.cls.run(() => {
-      this.cls.set('tenantId', 'cbacc0b6-03b3-4479-aaa1-bb8908964aaf');
       next();
     });
   }

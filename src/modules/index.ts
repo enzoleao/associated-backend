@@ -8,3 +8,4 @@ export { RedisModule } from './redis/redis.module'
 export { ResetPasswordTokensModule } from './reset-password-tokens/reset-password-tokens.module';
 export { EmailsModule } from './emails/emails.module';
 export { ResetPasswordModule } from './reset-password/reset-password.module';
+export { AssociatesModule } from './associates/associates.module';

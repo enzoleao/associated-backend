@@ -14,45 +14,118 @@ datasource db {
 }
 
 model Tenant {
-  id         String   @id @default(uuid())
-  name       String
-  cnpj       String?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String
+  logo_image     String?
+  identity_color String?
+  cnpj           String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
 
-  users User[]
+  users      User[]
+  associates Associate[]
 
   @@map("tenants")
 }
 
 model User {
-  id         String    @id @default(uuid())
-  tenant_id  String
-  name       String
-  initials   String
-  email      String    @unique
-  color      String?
-  password   String
-  role_id    Int
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  id              String    @id @default(uuid())
+  tenant_id       String
+  name            String
+  initials        String
+  image_path      String?
+  email           String    @unique
+  color           String?
+  cpf             String?
+  rg              String?
+  profession_name String?
+  phone           String?
+  birthday        DateTime? @db.Date
+  password        String
+  role_id         Int
+  created_at      DateTime  @default(now())
+  updated_at      DateTime? @updatedAt
 
   role                Role                 @relation(fields: [role_id], references: [id])
   tenant              Tenant               @relation(fields: [tenant_id], references: [id])
   passwordResetTokens PasswordResetToken[]
 
+  associate Associate? @relation("UserAssociate")
+
+  associates_created Associate[] @relation("AssociateCreator")
+  associates_updated Associate[] @relation("AssociateUpdater")
+
+  associates_address_created AssociateAddress[] @relation("AssociateAddressCreator")
+  associates_address_updated AssociateAddress[] @relation("AssociateAddressUpdater")
+
   @@map("users")
 }
 
 model Associate {
-  id              String    @id @default(uuid())
-  name            String
-  birthday        DateTime  @db.Date
-  membership_date DateTime  @db.Date
-  created_at      DateTime  @default(now())
-  updated_at      DateTime? @updatedAt
+  id                    String    @id @default(uuid())
+  tenant_id             String
+  user_id               String    @unique
+  payment_preference_id String
+  payment_due_date      String
+  membership_date       DateTime  @db.Date
+  creator_user_id       String
+  updater_user_id       String?
+  created_at            DateTime  @default(now())
+  updated_at            DateTime? @updatedAt
+
+  user   User   @relation("UserAssociate", fields: [user_id], references: [id])
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
+
+  creator_user User  @relation("AssociateCreator", fields: [creator_user_id], references: [id])
+  updater_user User? @relation("AssociateUpdater", fields: [updater_user_id], references: [id])
+
+  AssociateAddress AssociateAddress[]
 
   @@map("associates")
+}
+
+model PaymentMethod {
+  id           String    @id @default(uuid())
+  name         String    @unique
+  payment_code String?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+
+  @@map("payment_methods")
+}
+
+model AssociateAddress {
+  id               String    @id @default(uuid())
+  associate_id     String
+  street           String
+  neighborhood     String
+  number           String
+  complement       String?
+  country_state_id String
+  creator_user_id  String
+  updater_user_id  String?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime? @updatedAt
+
+  country_state CountryState @relation(fields: [country_state_id], references: [id])
+  associate     Associate    @relation(fields: [associate_id], references: [id])
+
+  creator_user User  @relation("AssociateAddressCreator", fields: [creator_user_id], references: [id])
+  updater_user User? @relation("AssociateAddressUpdater", fields: [updater_user_id], references: [id])
+
+  @@map("associate_address")
+}
+
+model CountryState {
+  id         String    @id @default(uuid())
+  name       String
+  initials   String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  associate_address AssociateAddress[]
+
+  @@map("country_states")
 }
 
 model Role {
@@ -101,7 +174,6 @@ model PasswordResetToken {
   updated_at DateTime? @updatedAt
 
   user User @relation(fields: [user_id], references: [id])
-
 
   @@map("password_reset_tokens")
 }

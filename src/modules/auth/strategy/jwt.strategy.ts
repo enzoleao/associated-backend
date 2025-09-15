@@ -39,17 +39,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   validate(req: Request, payload: JwtPayload) {
     const { userId, tenantId, client_token, client } = payload;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if (tenantId !== req.headers.tenant_id && client_token !== true) {
-      return this.throwUnauthorizedError();
-    }
     if (userId) {
       this.setUserIdContext(userId);
     }
     if (client) {
       this.setClientIdContext(client);
     }
+    if (tenantId) this.setTenantIdContext(tenantId)
+
     return true;
   }
 
@@ -59,6 +56,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   private setClientIdContext(clientId: string): void {
     this.cls.set('clientId', clientId);
+  }  
+  private setTenantIdContext(tenantId: string): void {
+    this.cls.set('tenantId', tenantId);
   }
 
   private throwUnauthorizedError(): never {
