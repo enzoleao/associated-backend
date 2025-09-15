@@ -10,6 +10,6 @@ import { ResetPasswordTokensModule } from '../reset-password-tokens/reset-passwo
   imports: [ResetPasswordTokensModule],
   controllers: [UsersController],
   providers: [UserRepository, CreateUserUseCase, PrismaService, FindUserByEmailUseCase, ResetUserPasswordUseCase, CreateUserAssociatedUseCase],
-  exports: [UserRepository, FindUserByEmailUseCase, ResetUserPasswordUseCase],
+  exports: [UserRepository, FindUserByEmailUseCase, ResetUserPasswordUseCase, CreateUserAssociatedUseCase],
 })
 export class UsersModule {}

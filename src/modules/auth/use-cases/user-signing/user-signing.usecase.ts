@@ -21,6 +21,8 @@ export class UserSigningUseCase {
       this.throwUnauthorizedError();
     }
 
+    console.log(user)
+
     const payload = {
       userId: user.id,
       email: user.email,

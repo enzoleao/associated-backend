@@ -1,5 +1,12 @@
 export interface ICreateUserAssociated {
-    name: string;
-    email: string;
-    cpf: string;
+  name: string;
+  email: string;
+  phone: string;
+  cpf: string;
+  rg?: string;
+  profession_name?: string;
+  birthday: string;
+  image_path?: string;
+  initials?: string;
+  password?: string;
 }

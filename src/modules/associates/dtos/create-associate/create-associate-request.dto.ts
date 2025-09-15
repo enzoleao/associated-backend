@@ -12,6 +12,11 @@ export class CreateAssociateRequestDto {
 
   @IsString()
   @IsOptional()
+  image_path: string;
+
+
+  @IsString()
+  @IsOptional()
   phone: string;
 
   @IsString()

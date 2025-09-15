@@ -38,14 +38,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   validate(req: Request, payload: JwtPayload) {
     const { userId, tenantId, client_token, client } = payload;
-
+    
     if (userId) {
       this.setUserIdContext(userId);
     }
     if (client) {
       this.setClientIdContext(client);
     }
-    if (tenantId) this.setTenantIdContext(tenantId)
+    if (tenantId) {
+      this.setTenantIdContext(tenantId)
+    } 
 
     return true;
   }

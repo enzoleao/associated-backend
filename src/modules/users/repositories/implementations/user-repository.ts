@@ -3,10 +3,25 @@ import { User } from '@prisma/client';
 import { IUserRepository } from '@/modules/users/repositories/user.repository';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { UserRolesEnum } from '@/common/enums/roles.enum';
+import { ICreateUserAssociated } from '../../interfaces/create-user-associated/create-user-associated.interface';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
+
+  createUserAssociated(data: ICreateUserAssociated): Promise<User> {
+    return this.prismaService.connectTenantQuery('user', 'create', {
+      data: {
+        ...data,
+        birthday: new Date(data.birthday),
+        role: {
+          connect: {
+            name: UserRolesEnum.ASSOCIATED,
+          },
+        },
+      }
+    })
+  }
 
   resetPassword({ password, user_id }: { password: string; user_id: string; }): Promise<User> {
     return this.prismaService.user.update({

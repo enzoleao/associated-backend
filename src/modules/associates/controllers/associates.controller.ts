@@ -14,6 +14,7 @@ export class AssociatesController {
   @Endpoint({
       method: 'POST',
       summary: 'Create Associated.',
+      isProtectedRoute: true
     })
   createAssociate(@Body() createAssociatedRequestDTO: CreateAssociateRequestDto) {
     return this.createAssociateUseCase.execute(createAssociatedRequestDTO)
