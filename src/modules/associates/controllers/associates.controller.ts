@@ -1,14 +1,16 @@
 import { Endpoint } from '@/common/decorators/endpoint';
 import { Body, Controller, Query } from '@nestjs/common';
 import { CreateAssociateRequestDto } from '../dtos/create-associate/create-associate-request.dto';
-import { CreateAssociateUseCase, PresignProfileImageUseCase } from '../use-cases';
+import { CreateAssociateUseCase, GetAssociatesUseCase, PresignProfileImageUseCase } from '../use-cases';
 import { PresignProfileImageRequestDto } from '../dtos/presign-profile-image/presign-profile-image-request.dto';
+import { GetAssociatesRequestParams } from '../dtos/get-associates/get-associates-request.dto';
 
 @Controller('associates')
 export class AssociatesController {
   constructor(
     private readonly createAssociateUseCase: CreateAssociateUseCase,
     private readonly presignProfileImageUseCase: PresignProfileImageUseCase,
+    private readonly getAssociatesUseCase: GetAssociatesUseCase,
   ){}
 
   @Endpoint({
@@ -18,6 +20,15 @@ export class AssociatesController {
     })
   createAssociate(@Body() createAssociatedRequestDTO: CreateAssociateRequestDto) {
     return this.createAssociateUseCase.execute(createAssociatedRequestDTO)
+  }
+
+  @Endpoint({
+    method: 'GET',
+    summary: 'Get Associates.',
+    isProtectedRoute: true
+  })
+  getAssociates(@Query() getAssociatesRequestParams: GetAssociatesRequestParams) {
+    return this.getAssociatesUseCase.execute(getAssociatesRequestParams)
   }
 
   @Endpoint({
