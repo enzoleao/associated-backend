@@ -11,7 +11,11 @@ import {
   EmailsModule,
   ResetPasswordModule,
   AssociatesModule,
-  AssociateAddressModule
+  AssociateAddressModule,
+  AssociatePlansModule,
+  PaymentMethodsModule,
+  CountryStatesModule,
+  AssociateStatusModule
 } from '@/modules';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { JwtStrategy } from '@/modules/auth/strategy/jwt.strategy';
@@ -20,7 +24,7 @@ import { BullConfigModule } from './modules/bull/bull.module';
 
 
 @Module({
-  imports: [UsersModule, ContextModule, AuthModule, StorageModule, TenantsModule, RedisModule, QueueModule, BullConfigModule, ResetPasswordTokensModule, EmailsModule, ResetPasswordModule, AssociatesModule, AssociateAddressModule],
+  imports: [UsersModule, ContextModule, AuthModule, StorageModule, TenantsModule, RedisModule, QueueModule, BullConfigModule, ResetPasswordTokensModule, EmailsModule, ResetPasswordModule, AssociatesModule, AssociateAddressModule, AssociatePlansModule, PaymentMethodsModule, CountryStatesModule, AssociateStatusModule],
   providers: [PrismaService, JwtStrategy],
 })
 export class AppModule implements NestModule {

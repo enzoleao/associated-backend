@@ -10,3 +10,7 @@ export { EmailsModule } from './emails/emails.module';
 export { ResetPasswordModule } from './reset-password/reset-password.module';
 export { AssociatesModule } from './associates/associates.module';
 export { AssociateAddressModule } from './associate-address/associate-address.module';
+export { AssociatePlansModule } from './associate-plans/associate-plans.module';
+export { PaymentMethodsModule } from './payment-methods/payment-methods.module';
+export { CountryStatesModule } from './country-states/country-states.module';
+export { AssociateStatusModule } from './associate-status/associate-status.module';
