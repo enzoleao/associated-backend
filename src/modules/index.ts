@@ -9,3 +9,4 @@ export { ResetPasswordTokensModule } from './reset-password-tokens/reset-passwor
 export { EmailsModule } from './emails/emails.module';
 export { ResetPasswordModule } from './reset-password/reset-password.module';
 export { AssociatesModule } from './associates/associates.module';
+export { AssociateAddressModule } from './associate-address/associate-address.module';

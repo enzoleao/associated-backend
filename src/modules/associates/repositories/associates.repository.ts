@@ -1,5 +1,6 @@
-import { User } from '@prisma/client';
+import { Associate } from '@prisma/client';
+import { ICreateAssociate } from '../interfaces/create-associate.interface';
 
 export interface IAssociatesRepository {
-    createAssociate(): Promise<User>
+    createAssociate(data: ICreateAssociate): Promise<Associate>
 }

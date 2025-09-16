@@ -24,6 +24,8 @@ model Tenant {
 
   users      User[]
   associates Associate[]
+  associatePlans AssociatePlan[]
+  associateAddress AssociateAddress[]
 
   @@map("tenants")
 }
@@ -61,20 +63,54 @@ model User {
   @@map("users")
 }
 
+model AssociateStatus {
+  id         Int       @id @default(autoincrement())
+  name       String @unique
+  color      String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  associates Associate[]
+
+  @@map("associate_status")
+}
+
+model AssociatePlan {
+  id String @id @default(uuid())
+  tenant_id String
+  name String @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenant_id], references: [id])
+
+  associates Associate[]
+
+  @@map("associate_plans")
+}
+
+
 model Associate {
-  id                    String    @id @default(uuid())
+  id                    String @id @default(uuid())
   tenant_id             String
-  user_id               String    @unique
-  payment_preference_id String
+  user_id               String @unique
+  associate_status_id   Int
+  associate_plan_id  String
+  payment_method_preference_id String
   payment_due_date      String
-  membership_date       DateTime  @db.Date
-  creator_user_id       String
-  updater_user_id       String?
-  created_at            DateTime  @default(now())
-  updated_at            DateTime? @updatedAt
+  
+
+  membership_date DateTime  @db.Date
+  creator_user_id String
+  updater_user_id String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime? @updatedAt
 
   user   User   @relation("UserAssociate", fields: [user_id], references: [id])
   tenant Tenant @relation(fields: [tenant_id], references: [id])
+  paymentPreferenceMethod PaymentMethod @relation(fields: [payment_method_preference_id], references: [id])
+  associateStatus AssociateStatus @relation(fields: [associate_status_id], references: [id])
+  associatePlan AssociatePlan @relation(fields: [associate_plan_id], references: [id])
 
   creator_user User  @relation("AssociateCreator", fields: [creator_user_id], references: [id])
   updater_user User? @relation("AssociateUpdater", fields: [updater_user_id], references: [id])
@@ -91,16 +127,21 @@ model PaymentMethod {
   created_at   DateTime  @default(now())
   updated_at   DateTime? @updatedAt
 
+  associate Associate[]
+
   @@map("payment_methods")
 }
 
 model AssociateAddress {
   id               String    @id @default(uuid())
+  tenant_id        String
   associate_id     String
   street           String
   neighborhood     String
+  city             String
   number           String
   complement       String?
+  zip_code         String
   country_state_id String
   creator_user_id  String
   updater_user_id  String?
@@ -108,6 +149,7 @@ model AssociateAddress {
   updated_at       DateTime? @updatedAt
 
   country_state CountryState @relation(fields: [country_state_id], references: [id])
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
   associate     Associate    @relation(fields: [associate_id], references: [id])
 
   creator_user User  @relation("AssociateAddressCreator", fields: [creator_user_id], references: [id])

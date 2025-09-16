@@ -49,18 +49,24 @@ export class CreateAssociateRequestDto {
   @IsString()
   number: string;
 
-  @IsNumber()
-  state_id: number;
+  @IsString()
+  state_id: string;
 
   @IsString()
   zip_code: string;
 
-  @IsNumber()
-  payment_method_id: number;
+  @IsString()
+  payment_method_preference_id: string;
 
   @IsString()
   membership_date: string;
 
   @IsString()
   payment_due_date: string;
+  
+  @IsString()
+  associate_plan_id: string;
+  
+  @IsNumber()
+  associate_status_id: number;
 }

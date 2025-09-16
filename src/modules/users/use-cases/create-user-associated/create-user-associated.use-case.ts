@@ -3,6 +3,8 @@ import { ICreateUserAssociated } from '../../interfaces/create-user-associated/c
 import { UserRepository } from '../../repositories/implementations/user-repository';
 import { randomBytes } from 'crypto';
 import { sanitizeString } from '@/common/utils';
+import { ErrorMessages } from '@/common/messages/error-messages';
+import { CustomBadRequestException } from '@/common/exceptions';
 
 @Injectable()
 export class CreateUserAssociatedUseCase {
@@ -13,7 +15,7 @@ export class CreateUserAssociatedUseCase {
 
     const user = await this.userRepository.findUserByEmail(email);
     if (user) {
-      throw new ConflictException('Email já cadastrado');
+      this.throwUnauthorizedError()
     }
 
     return this.userRepository.createUserAssociated({
@@ -47,6 +49,14 @@ export class CreateUserAssociatedUseCase {
   }
 
   private  generateRandomPassword(length = 12): string {
-  return randomBytes(length).toString('base64').slice(0, length);
-}
+    return randomBytes(length).toString('base64').slice(0, length);
+  }
+
+  private throwUnauthorizedError(): never {
+      throw new CustomBadRequestException(
+        ['email'],
+        'Já possui um usuário/associado cadastrado com esse e-mail',
+        'BAD_REQUEST',
+      );
+  }
 }
