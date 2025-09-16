@@ -14,7 +14,6 @@ export class ForgetPasswordRequestUseCase {
 
   async execute({ email }: { email: string }) {
     const user = await this.findUserByEmailUseCase.execute(email);
-
     if (!user) {
       return;
     }
