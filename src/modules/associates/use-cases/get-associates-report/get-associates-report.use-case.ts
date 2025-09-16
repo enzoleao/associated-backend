@@ -8,7 +8,6 @@ export class GetAssociatesReportUseCase {
   ){}
   async execute() {
     const associateData = await this.associatesRepository.getAssociatesReport()
-
     return {
       associate_active_count: associateData.activeUsers,
       associate_total_count: associateData.totalUsers,
