@@ -6,4 +6,6 @@ export interface IAssociatesRepository {
     createAssociate(data: ICreateAssociate): Promise<Associate>
 
     getAssociates(query: GetAssociatesRequestParams): Promise<any>
+
+    getAssociatesReport(): Promise<{totalUsers: number; activeUsers: number}>;
 }

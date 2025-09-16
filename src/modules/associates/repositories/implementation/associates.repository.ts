@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { IAssociatesRepository } from '../associates.repository';
-import { Associate, User } from '@prisma/client';
+import { Associate } from '@prisma/client';
 import { ICreateAssociate } from '../../interfaces/create-associate.interface';
 import { PrismaService } from '@/modules/prisma/prisma.service';
 import { GetAssociatesRequestParams } from '../../dtos/get-associates/get-associates-request.dto';
 import { paginate } from '@/common/helpers/paginate';
+import { AssociateStatusEnum } from '@/common/enums/associate-status.enum';
 
 @Injectable()
 export class AssociatesRepository implements IAssociatesRepository {
@@ -22,7 +23,9 @@ export class AssociatesRepository implements IAssociatesRepository {
       filters: {
         associate: {
           associateStatus: {
-            id: paginationQueryDto.associate_status_id
+            id: paginationQueryDto.associate_status_id && paginationQueryDto.associate_status_id !== 0
+              ? paginationQueryDto.associate_status_id
+              : undefined
           }
         }
       }
@@ -32,6 +35,7 @@ export class AssociatesRepository implements IAssociatesRepository {
         id: true,
         name: true,
         email: true,
+        initials: true,
         image_path: true,
         cpf: true,
         associate: {
@@ -70,5 +74,25 @@ export class AssociatesRepository implements IAssociatesRepository {
       }
     })
   }
+
+
+  async getAssociatesReport(): Promise<{totalUsers: number, activeUsers: number;}> {
+  const [activeUsers, totalUsers] = await Promise.all([
+    this.prismaService.connectTenantQuery('associate', 'count', {
+      where: {
+        associateStatus: {
+          name: AssociateStatusEnum.ACTIVE
+        }
+      }
+    }) as Promise<number>,
+    this.prismaService.connectTenantQuery('associate', 'count') as Promise<number>,
+  ]);
+
+
+  return {
+    activeUsers,
+    totalUsers,
+  };
+}
  
 }
