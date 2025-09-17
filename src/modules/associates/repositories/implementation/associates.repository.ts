@@ -40,6 +40,7 @@ export class AssociatesRepository implements IAssociatesRepository {
         cpf: true,
         associate: {
           select: {
+            id: true,
             membership_date: true,
             associateStatus: {
               select: {
