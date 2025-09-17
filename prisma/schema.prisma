@@ -117,7 +117,23 @@ model Associate {
 
   AssociateAddress AssociateAddress[]
 
+  dependent Dependent[]
+
   @@map("associates")
+}
+
+model Dependent {
+  id           String    @id @default(uuid())
+  associate_id String
+  name         String
+  cpf          String    @unique
+  birthday     DateTime  @db.Date
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+
+  associate Associate @relation(fields: [associate_id], references: [id])
+
+  @@map("dependents")
 }
 
 model PaymentMethod {

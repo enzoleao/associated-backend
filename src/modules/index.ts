@@ -14,3 +14,4 @@ export { AssociatePlansModule } from './associate-plans/associate-plans.module';
 export { PaymentMethodsModule } from './payment-methods/payment-methods.module';
 export { CountryStatesModule } from './country-states/country-states.module';
 export { AssociateStatusModule } from './associate-status/associate-status.module';
+export { DependentsModule } from './dependents/dependents.module';
