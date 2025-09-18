@@ -6,6 +6,7 @@ import {
   AssociateStatusSeeder, 
   CountryStatessSeeder, 
   PaymentsMethodsSeeder, 
+  DependentRelationshipSeeder,
   RolesSeeder } from './seeders/starts';
 import { RolesPermisionSeeder } from './seeders/permissions/roles-permission.seeder';
 
@@ -20,7 +21,8 @@ class Seeder {
       new PaymentsMethodsSeeder(),
       new CountryStatessSeeder(),
       new AssociatePlansSeeder(),
-      new AssociateStatusSeeder()
+      new AssociateStatusSeeder(),
+      new DependentRelationshipSeeder(),
     ];
   }
 

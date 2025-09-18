@@ -6,15 +6,18 @@ import { PrismaService } from '@/modules/prisma/prisma.service';
 import { GetAssociatesRequestParams } from '../../dtos/get-associates/get-associates-request.dto';
 import { paginate } from '@/common/helpers/paginate';
 import { AssociateStatusEnum } from '@/common/enums/associate-status.enum';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class AssociatesRepository implements IAssociatesRepository {
   constructor(
-    private readonly prismaService: PrismaService
+    private readonly prismaService: PrismaService,
+    private readonly cls: ClsService
   ){}
 
 
   async getAssociates(paginationQueryDto: GetAssociatesRequestParams): Promise<any> {
+    const tenantId = await this.cls.get('tenantId');
     return paginate({
       prisma: this.prismaService,
       model: 'user',
@@ -27,7 +30,8 @@ export class AssociatesRepository implements IAssociatesRepository {
               ? paginationQueryDto.associate_status_id
               : undefined
           }
-        }
+        },
+        tenant_id: tenantId
       }
     },
       searchFields: ['name', 'cpf', 'email'],
@@ -35,6 +39,7 @@ export class AssociatesRepository implements IAssociatesRepository {
         id: true,
         name: true,
         email: true,
+        color: true,
         initials: true,
         image_path: true,
         cpf: true,
@@ -54,8 +59,13 @@ export class AssociatesRepository implements IAssociatesRepository {
                 id: true,
                 name: true
               }
+            },
+            _count: {
+              select: {
+                dependent: true
+              }
             }
-          }
+          },
         },
         created_at: true,
       },
@@ -77,22 +87,34 @@ export class AssociatesRepository implements IAssociatesRepository {
   }
 
 
-  async getAssociatesReport(): Promise<{totalUsers: number, activeUsers: number;}> {
-  const [activeUsers, totalUsers] = await Promise.all([
-    this.prismaService.connectTenantQuery('associate', 'count', {
+  async getAssociatesReport(): Promise<{totalUsers: number, activeUsers: number; totalDependents: number}> {
+  const [activeUsers, totalUsers, totalDependents] = await Promise.all([
+    this.prismaService.associate.count({
       where: {
         associateStatus: {
-          name: AssociateStatusEnum.ACTIVE
-        }
+          name:  AssociateStatusEnum.ACTIVE
+        },
+        tenant_id: await this.cls.get('tenantId')
       }
-    }) as Promise<number>,
-    this.prismaService.connectTenantQuery('associate', 'count') as Promise<number>,
+      }) as Promise<number>,
+    this.prismaService.associate.count({
+      where: {
+        tenant_id: await this.cls.get('tenantId')
+      }
+      }) as Promise<number>,
+      
+    this.prismaService.dependent.count({
+      where: {
+        tenant_id: await this.cls.get('tenantId')
+      }
+      }) as Promise<number>,
   ]);
 
 
   return {
     activeUsers,
     totalUsers,
+    totalDependents
   };
 }
  

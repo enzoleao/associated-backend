@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "dependents" ALTER COLUMN "name" DROP NOT NULL,
+ALTER COLUMN "cpf" DROP NOT NULL,
+ALTER COLUMN "birthday" DROP NOT NULL;

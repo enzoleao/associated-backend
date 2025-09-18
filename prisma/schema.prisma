@@ -16,15 +16,16 @@ datasource db {
 model Tenant {
   id             String   @id @default(uuid())
   name           String
+  identification String?   @unique
   logo_image     String?
   identity_color String?
   cnpj           String?
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
 
-  users      User[]
-  associates Associate[]
-  associatePlans AssociatePlan[]
+  users            User[]
+  associates       Associate[]
+  associatePlans   AssociatePlan[]
   associateAddress AssociateAddress[]
 
   @@map("tenants")
@@ -36,7 +37,7 @@ model User {
   name            String
   initials        String
   image_path      String?
-  email           String    @unique
+  email           String   
   color           String?
   cpf             String?
   rg              String?
@@ -65,7 +66,7 @@ model User {
 
 model AssociateStatus {
   id         Int       @id @default(autoincrement())
-  name       String @unique
+  name       String    @unique
   color      String
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
@@ -76,41 +77,38 @@ model AssociateStatus {
 }
 
 model AssociatePlan {
-  id String @id @default(uuid())
-  tenant_id String
-  name String @unique
+  id         String    @id @default(uuid())
+  tenant_id  String
+  name       String    @unique
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  tenant   Tenant   @relation(fields: [tenant_id], references: [id])
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
 
   associates Associate[]
 
   @@map("associate_plans")
 }
 
-
 model Associate {
-  id                    String @id @default(uuid())
-  tenant_id             String
-  user_id               String @unique
-  associate_status_id   Int
-  associate_plan_id  String
+  id                           String @id @default(uuid())
+  tenant_id                    String
+  user_id                      String @unique
+  associate_status_id          Int
+  associate_plan_id            String
   payment_method_preference_id String
-  payment_due_date      String
-  
-
-  membership_date DateTime  @db.Date
+  payment_due_date             String
+  membership_date DateTime?  @db.Date
   creator_user_id String
   updater_user_id String?
   created_at      DateTime  @default(now())
   updated_at      DateTime? @updatedAt
 
-  user   User   @relation("UserAssociate", fields: [user_id], references: [id])
-  tenant Tenant @relation(fields: [tenant_id], references: [id])
-  paymentPreferenceMethod PaymentMethod @relation(fields: [payment_method_preference_id], references: [id])
-  associateStatus AssociateStatus @relation(fields: [associate_status_id], references: [id])
-  associatePlan AssociatePlan @relation(fields: [associate_plan_id], references: [id])
+  user                    User            @relation("UserAssociate", fields: [user_id], references: [id])
+  tenant                  Tenant          @relation(fields: [tenant_id], references: [id])
+  paymentPreferenceMethod PaymentMethod   @relation(fields: [payment_method_preference_id], references: [id])
+  associateStatus         AssociateStatus @relation(fields: [associate_status_id], references: [id])
+  associatePlan           AssociatePlan   @relation(fields: [associate_plan_id], references: [id])
 
   creator_user User  @relation("AssociateCreator", fields: [creator_user_id], references: [id])
   updater_user User? @relation("AssociateUpdater", fields: [updater_user_id], references: [id])
@@ -123,17 +121,32 @@ model Associate {
 }
 
 model Dependent {
-  id           String    @id @default(uuid())
-  associate_id String
-  name         String
-  cpf          String    @unique
-  birthday     DateTime  @db.Date
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
+  id                        String    @id @default(uuid())
+  tenant_id                 String?   
+  associate_id              String
+  dependent_relationship_id Int?
+  name                      String?
+  cpf                       String?    
+  birthday                  DateTime?  @db.Date
+  is_assured                Boolean   @default(false)
+  created_at                DateTime  @default(now())
+  updated_at                DateTime? @updatedAt
 
-  associate Associate @relation(fields: [associate_id], references: [id])
+  associate             Associate              @relation(fields: [associate_id], references: [id])
+  dependent_relationship DependentRelationship? @relation(fields: [dependent_relationship_id], references: [id])
 
   @@map("dependents")
+}
+
+model DependentRelationship {
+  id         Int    @id @default(autoincrement())
+  name        String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  dependents Dependent[]
+
+  @@map("dependent_relationships")
 }
 
 model PaymentMethod {
@@ -165,7 +178,7 @@ model AssociateAddress {
   updated_at       DateTime? @updatedAt
 
   country_state CountryState @relation(fields: [country_state_id], references: [id])
-  tenant Tenant @relation(fields: [tenant_id], references: [id])
+  tenant        Tenant       @relation(fields: [tenant_id], references: [id])
   associate     Associate    @relation(fields: [associate_id], references: [id])
 
   creator_user User  @relation("AssociateAddressCreator", fields: [creator_user_id], references: [id])

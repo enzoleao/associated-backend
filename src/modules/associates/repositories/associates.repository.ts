@@ -7,5 +7,5 @@ export interface IAssociatesRepository {
 
     getAssociates(query: GetAssociatesRequestParams): Promise<any>
 
-    getAssociatesReport(): Promise<{totalUsers: number; activeUsers: number}>;
+    getAssociatesReport(): Promise<{totalUsers: number; activeUsers: number; totalDependents: number}>;
 }

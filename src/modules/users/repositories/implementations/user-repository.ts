@@ -48,11 +48,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    return this.prismaService.user.findUnique({
-      where: {
-        email
-      }
-    })
+    return this.prismaService.tenantQuery('user', 'findFirst', {
+      where: { email },
+    });
   }
 
 }

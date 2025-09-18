@@ -18,7 +18,7 @@ import {  RegisterResetPasswordUseCase, ResetPasswordUseCase } from './use-cases
     QueueModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: 3600 },
     }),
     UsersModule,
     ResetPasswordModule

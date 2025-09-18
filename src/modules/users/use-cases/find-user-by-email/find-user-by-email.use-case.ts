@@ -7,6 +7,7 @@ export class FindUserByEmailUseCase {
     private readonly userRepository: UserRepository
   ){}
   execute(email: string) {
+    
     return this.userRepository.findUserByEmail(email)
   }
 }

@@ -9,7 +9,7 @@ export class DependentsRepository implements IDependentsRepository {
   ){}
 
   getDependentsByAssociatedId(associatedId: string): Promise<any> {
-    return this.prismaService.tenantQuery('associate', 'findMany', {
+    return this.prismaService.tenantQuery('associate', 'findUnique', {
       where: {
         id: associatedId
       },
@@ -25,7 +25,13 @@ export class DependentsRepository implements IDependentsRepository {
           id: true,
           name: true,
           birthday: true,
-          cpf: true
+          cpf: true,
+          dependent_relationship: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         }
       }
       }

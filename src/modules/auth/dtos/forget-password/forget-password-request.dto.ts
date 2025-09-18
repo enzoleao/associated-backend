@@ -7,4 +7,7 @@ export class ForgetPasswordRequestDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty()
+  @IsString()
+  tenant_id: string;
 }

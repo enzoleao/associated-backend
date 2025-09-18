@@ -1,7 +1,8 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Global, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ClsModule } from 'nestjs-cls';
 import { ContextMiddleware } from '@/modules/context/middlewares/context.middleware';
 
+@Global()
 @Module({
   imports: [
     ClsModule.forRoot({

@@ -11,7 +11,8 @@ export class GetAssociatesReportUseCase {
     return {
       associate_active_count: associateData.activeUsers,
       associate_total_count: associateData.totalUsers,
-      retention_rate: (associateData.activeUsers / associateData.totalUsers)
+      retention_rate: (associateData.activeUsers / associateData.totalUsers),
+      total_dependents: associateData.totalDependents
     }
   }
 }

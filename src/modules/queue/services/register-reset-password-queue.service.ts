@@ -7,10 +7,11 @@ export class RegisterResetPasswordService {
   constructor( @InjectQueue('reset-password')
     private readonly resetPasswordQueue: Queue,) {}
 
-  async send ({email }: {email: string }) {
+  async send ({email, tenant_id }: {email: string; tenant_id: string}): Promise<any> {
+    console.log('Enviando job para fila de reset-password com tenant_id:', tenant_id);
     return this.resetPasswordQueue.add(
       'register-reset-password',
-      { email },
+      { email, tenant_id },
       {
         attempts: 5,
         backoff: 5000,

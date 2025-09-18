@@ -9,10 +9,11 @@ export class ForgetPasswordRequestUseCase {
   constructor(
     private readonly createPasswordResetTokenUseCase: CreatePasswordResetTokenUseCase,
     private readonly findUserByEmailUseCase: FindUserByEmailUseCase,
-    private readonly registerNotificationService: RegisterNotificationService
+    private readonly registerNotificationService: RegisterNotificationService,
+    
   ) {}
 
-  async execute({ email }: { email: string }) {
+  async execute({ email, tenant_id }: { email: string; tenant_id: string }): Promise<void> {
     const user = await this.findUserByEmailUseCase.execute(email);
     if (!user) {
       return;

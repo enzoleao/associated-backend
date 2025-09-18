@@ -32,7 +32,7 @@ export class AuthController {
     summary: 'Auth User.',
   })
   forgetPassword(@Body() forgetPasswordRequestDto: ForgetPasswordRequestDto) {
-    this.registerResetPasswordUseCase.execute({email: forgetPasswordRequestDto.email})
+    this.registerResetPasswordUseCase.execute({email: forgetPasswordRequestDto.email, tenant_id: forgetPasswordRequestDto.tenant_id})
     return {
       message: "Caso você tenha registro, será enviado instruções para seu e-mail"
     };

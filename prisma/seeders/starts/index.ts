@@ -3,3 +3,4 @@ export { CountryStatessSeeder } from './country_states.seeder';
 export { PaymentsMethodsSeeder } from './payment_methods.seeder';
 export { AssociatePlansSeeder } from './associate-plans.seeder';
 export { AssociateStatusSeeder } from './associate-status.seeder';
+export { DependentRelationshipSeeder } from './dependent-relationship.seeder';

@@ -79,6 +79,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       'deleteMany',
       'update',
       'delete',
+      'count',
     ].includes(action);
 
     const modifyData = [

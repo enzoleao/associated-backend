@@ -6,7 +6,7 @@ export class RegisterResetPasswordUseCase {
     constructor(
       private readonly sendResetPasswordQueueService: RegisterResetPasswordService
     ){}
-    async execute ({email}: {email: string}) {
-      return this.sendResetPasswordQueueService.send({ email })
+    async execute ({email, tenant_id}: {email: string, tenant_id: string}): Promise<any> {
+      return this.sendResetPasswordQueueService.send({ email, tenant_id })
     }
 }
