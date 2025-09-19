@@ -9,6 +9,15 @@ export class ResourceSeeder {
       { "name": "ASSOCIATES" },
       { "name": "DEPENDENTS" },
       { "name": "ROLES" },
+      { "name": "MENUS" },
+      { "name": "PAYMENT_METHODS" },
+      { "name": "PAYMENTS" },
+      { "name": "DASHBOARD" },
+      { "name": "SETTINGS" },
+      { "name": "COUNTRY_STATES"},
+      { "name": "ASSOCIATE_PLANS" },
+      { "name": "ASSOCIATE_STATUS" },
+      { "name": "HOME" },
     ]
 
     for (const resource of resourceData) {

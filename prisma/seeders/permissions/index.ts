@@ -6,3 +6,5 @@ export { PaymentMethodsPermissionSeeder } from './payment-methods-permission.see
 export { AssociateStatusPermissionSeeder } from './associate-status-permission.seeder';
 export { AssociatePlansPermissionSeeder } from './associate-plans-permission.seeder';
 export { CountryStatesPermissionSeeder } from './country-states-permission.seeder';
+export { MenusPermissionSeeder } from './menus-permissions.seeder';
+export { HomePermissionSeeder } from './home-permissions.seeder';

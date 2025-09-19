@@ -4,6 +4,8 @@ import {
   AssociateStatusPermissionSeeder,
   CountryStatesPermissionSeeder,
   DependentsPermissionSeeder,
+  HomePermissionSeeder,
+  MenusPermissionSeeder,
   PaymentMethodsPermissionSeeder,
   RolesPermisionSeeder,
   UsersPermissionSeeder,
@@ -15,7 +17,8 @@ import {
   PaymentsMethodsSeeder, 
   DependentRelationshipSeeder,
   RolesSeeder, 
-  ResourceSeeder} from './seeders/starts';
+  ResourceSeeder,
+  MenusSeeder} from './seeders/starts';
 
 class Seeder {
   private readonly seeders: { seed: () => Promise<void> }[];
@@ -30,6 +33,7 @@ class Seeder {
       new DependentRelationshipSeeder(),
       new ResourceSeeder(),
       new AssociatePlansSeeder(),
+      new MenusSeeder(),
 
       //PERMISSION
       new RolesPermisionSeeder(),
@@ -40,6 +44,8 @@ class Seeder {
       new AssociateStatusPermissionSeeder(),
       new AssociatePlansPermissionSeeder(),
       new CountryStatesPermissionSeeder(),
+      new MenusPermissionSeeder(),
+      new HomePermissionSeeder(),
     ];
   }
 

@@ -16,3 +16,4 @@ export { CountryStatesModule } from './country-states/country-states.module';
 export { AssociateStatusModule } from './associate-status/associate-status.module';
 export { DependentsModule } from './dependents/dependents.module';
 export { TenantInformationsModule } from './tenant-informations/tenant-informations.module';
+export { MenusModule } from './menus/menus.module';
