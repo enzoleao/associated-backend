@@ -1,4 +1,11 @@
 import {
+  AssociatePlansPermissionSeeder,
+  AssociatesPermissionSeeder,
+  AssociateStatusPermissionSeeder,
+  CountryStatesPermissionSeeder,
+  DependentsPermissionSeeder,
+  PaymentMethodsPermissionSeeder,
+  RolesPermisionSeeder,
   UsersPermissionSeeder,
 } from './seeders/permissions';
 import { 
@@ -7,8 +14,8 @@ import {
   CountryStatessSeeder, 
   PaymentsMethodsSeeder, 
   DependentRelationshipSeeder,
-  RolesSeeder } from './seeders/starts';
-import { RolesPermisionSeeder } from './seeders/permissions/roles-permission.seeder';
+  RolesSeeder, 
+  ResourceSeeder} from './seeders/starts';
 
 class Seeder {
   private readonly seeders: { seed: () => Promise<void> }[];
@@ -16,13 +23,23 @@ class Seeder {
   constructor() {
     this.seeders = [
       new RolesSeeder(),
-      new UsersPermissionSeeder(),
-      new RolesPermisionSeeder(),
       new PaymentsMethodsSeeder(),
       new CountryStatessSeeder(),
       new AssociatePlansSeeder(),
       new AssociateStatusSeeder(),
       new DependentRelationshipSeeder(),
+      new ResourceSeeder(),
+      new AssociatePlansSeeder(),
+
+      //PERMISSION
+      new RolesPermisionSeeder(),
+      new UsersPermissionSeeder(),
+      new AssociatesPermissionSeeder(),
+      new DependentsPermissionSeeder(),
+      new PaymentMethodsPermissionSeeder(),
+      new AssociateStatusPermissionSeeder(),
+      new AssociatePlansPermissionSeeder(),
+      new CountryStatesPermissionSeeder(),
     ];
   }
 

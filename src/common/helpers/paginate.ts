@@ -9,6 +9,10 @@ interface PaginateOptions<T> {
   select?: Record<string, any>;
 }
 
+function onlyDigits(value: string): string {
+  return (value || '').replace(/\D+/g, '');
+}
+
 export async function paginate<T>({
   prisma,
   model,
@@ -35,21 +39,44 @@ export async function paginate<T>({
   };
 
   if (args.search_term && searchFields.length) {
+    const rawTerm = args.search_term.trim();
+    const digits = onlyDigits(rawTerm);
+
     where.OR = searchFields.map((field) => {
       if (field.includes('.')) {
         const [relation, column] = field.split('.');
+
+        if (column.toLowerCase() === 'cpf') {
+          return {
+            [relation]: {
+              [column]: {
+                equals: digits,
+              },
+            },
+          };
+        }
+
         return {
           [relation]: {
             [column]: {
-              contains: args.search_term,
+              contains: rawTerm,
               mode: 'insensitive',
             },
           },
         };
       }
+
+      if (field.toLowerCase() === 'cpf') {
+        return {
+          [field]: {
+            equals: digits,
+          },
+        };
+      }
+
       return {
         [field]: {
-          contains: args.search_term,
+          contains: rawTerm,
           mode: 'insensitive',
         },
       };

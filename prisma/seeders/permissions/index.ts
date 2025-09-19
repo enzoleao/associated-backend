@@ -1,1 +1,8 @@
 export { UsersPermissionSeeder } from './users-permission.seeder';
+export { AssociatesPermissionSeeder } from './associates-permission.seeder';
+export { RolesPermisionSeeder } from './roles-permission.seeder';
+export { DependentsPermissionSeeder } from './dependents-permission.seeder';
+export { PaymentMethodsPermissionSeeder } from './payment-methods-permission.seeder';
+export { AssociateStatusPermissionSeeder } from './associate-status-permission.seeder';
+export { AssociatePlansPermissionSeeder } from './associate-plans-permission.seeder';
+export { CountryStatesPermissionSeeder } from './country-states-permission.seeder';

@@ -15,26 +15,31 @@ export class AssociatePlansSeeder {
     for (const tenant of tenants) {
       for (const plan of associatePlans) {
         try {
-          await prisma.associatePlan.upsert({
+          const existingPlan = await prisma.associatePlan.findFirst({
             where: {
-              tenant: {
-                id: tenant.id,
-              },
-              name: plan.name
-            },
-            update: {
               name: plan.name,
-            },
-            create: {
               tenant_id: tenant.id,
-              name: plan.name,
             },
           });
 
-          console.log(
-            '\x1b[32m%s\x1b[0m',
-            `Associate plan "${plan.name}" seeded successfully for tenant ${tenant.id}.`,
-          );
+          if (!existingPlan) {
+            await prisma.associatePlan.create({
+              data: {
+                name: plan.name,
+                tenant_id: tenant.id,
+              },
+            });
+
+            console.log(
+              '\x1b[32m%s\x1b[0m',
+              `Associate plan "${plan.name}" seeded successfully for tenant ${tenant.id}.`,
+            );
+          } else {
+            console.log(
+              '\x1b[33m%s\x1b[0m',
+              `Associate plan "${plan.name}" already exists for tenant ${tenant.id}, skipping.`,
+            );
+          }
         } catch (error) {
           console.error(
             '\x1b[31m%s\x1b[0m',

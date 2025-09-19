@@ -8,6 +8,32 @@ import { ICreateUserAssociated } from '../../interfaces/create-user-associated/c
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(private readonly prismaService: PrismaService) {}
+  getUserPermissions(userId: string): Promise<any> {
+    return this.prismaService.tenantQuery('user', 'findUnique', {
+      where: { id: userId },
+      select: {
+        role: {
+          select: {
+            permissions: {
+              select: {
+                permission: {
+                  select: {
+                    name: true,
+                    method: true,
+                    resource: {
+                      select: {
+                        name: true,
+                      },
+                    },
+                  },
+                }
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 
   createUserAssociated(data: ICreateUserAssociated): Promise<User> {
     return this.prismaService.connectTenantQuery('user', 'create', {
@@ -50,6 +76,9 @@ export class UserRepository implements IUserRepository {
   async findUserByEmail(email: string): Promise<User | null> {
     return this.prismaService.tenantQuery('user', 'findFirst', {
       where: { email },
+      include: {
+        role: true,
+      }
     });
   }
 

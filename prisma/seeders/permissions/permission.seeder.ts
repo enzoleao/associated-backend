@@ -3,11 +3,11 @@ import { Permission, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class PermissionSeeder {
-  private permissions: { name: string; resource: string; method: string }[];
+  private permissions: { name: string; resource_name: string; method: string }[];
   private roles: string[];
 
   constructor(
-    permissions: { name: string; resource: string; method: string }[],
+    permissions: { name: string; resource_name: string; method: string }[],
     roles: string[],
   ) {
     this.permissions = permissions;
@@ -20,17 +20,24 @@ export class PermissionSeeder {
       for (const permission of this.permissions) {
         let existingPermission = await prisma.permission.findFirst({
           where: {
-            resource: permission.resource,
             method: permission.method,
             name: permission.name,
           },
         });
 
         if (!existingPermission) {
+          const resource = await prisma.resource.findUnique({
+            where: { name: permission.resource_name },
+          });
+
+          if (!resource) {
+            console.warn(`\x1b[33mResource "${permission.resource_name}" not found. Skipping permission "${permission.name}".\x1b[0m`);
+            continue;
+}
           existingPermission = await prisma.permission.create({
             data: {
               name: permission.name,
-              resource: permission.resource,
+              resource_id:  resource.id,
               method: permission.method,
             },
           });

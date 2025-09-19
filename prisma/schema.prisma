@@ -16,7 +16,7 @@ datasource db {
 model Tenant {
   id             String   @id @default(uuid())
   name           String
-  identification String?   @unique
+  identification String?  @unique
   logo_image     String?
   identity_color String?
   cnpj           String?
@@ -37,7 +37,7 @@ model User {
   name            String
   initials        String
   image_path      String?
-  email           String   
+  email           String
   color           String?
   cpf             String?
   rg              String?
@@ -79,7 +79,7 @@ model AssociateStatus {
 model AssociatePlan {
   id         String    @id @default(uuid())
   tenant_id  String
-  name       String    @unique
+  name       String    
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
@@ -91,18 +91,18 @@ model AssociatePlan {
 }
 
 model Associate {
-  id                           String @id @default(uuid())
+  id                           String    @id @default(uuid())
   tenant_id                    String
-  user_id                      String @unique
+  user_id                      String    @unique
   associate_status_id          Int
   associate_plan_id            String
   payment_method_preference_id String
   payment_due_date             String
-  membership_date DateTime?  @db.Date
-  creator_user_id String
-  updater_user_id String?
-  created_at      DateTime  @default(now())
-  updated_at      DateTime? @updatedAt
+  membership_date              DateTime? @db.Date
+  creator_user_id              String
+  updater_user_id              String?
+  created_at                   DateTime  @default(now())
+  updated_at                   DateTime? @updatedAt
 
   user                    User            @relation("UserAssociate", fields: [user_id], references: [id])
   tenant                  Tenant          @relation(fields: [tenant_id], references: [id])
@@ -122,25 +122,25 @@ model Associate {
 
 model Dependent {
   id                        String    @id @default(uuid())
-  tenant_id                 String?   
+  tenant_id                 String?
   associate_id              String
   dependent_relationship_id Int?
   name                      String?
-  cpf                       String?    
-  birthday                  DateTime?  @db.Date
+  cpf                       String?
+  birthday                  DateTime? @db.Date
   is_assured                Boolean   @default(false)
   created_at                DateTime  @default(now())
   updated_at                DateTime? @updatedAt
 
-  associate             Associate              @relation(fields: [associate_id], references: [id])
+  associate              Associate              @relation(fields: [associate_id], references: [id])
   dependent_relationship DependentRelationship? @relation(fields: [dependent_relationship_id], references: [id])
 
   @@map("dependents")
 }
 
 model DependentRelationship {
-  id         Int    @id @default(autoincrement())
-  name        String    @unique
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
@@ -211,13 +211,26 @@ model Role {
   @@map("roles")
 }
 
-model Permission {
+model Resource {
   id         Int       @id @default(autoincrement())
   name       String    @unique
-  resource   String
-  method     String
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
+
+  permissions Permission[]
+
+  @@map("resources")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  resource_id Int?       
+  method      String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
+
+  resource Resource? @relation(fields: [resource_id], references: [id])
 
   roles RolesHasPermissions[]
 

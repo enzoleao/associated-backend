@@ -7,4 +7,6 @@ export interface IUserRepository {
   createUserAssociated(data: ICreateUserAssociated): Promise<User>
 
   resetPassword({ password, user_id}: {password: string, user_id: string; }): Promise<User>
+
+  getUserPermissions(userId: string): Promise<any>;
 }
