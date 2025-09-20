@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Tenant {
-  id             String   @id @default(uuid())
+  id             String   @id @default(ulid())
   name           String
   identification String?  @unique
   logo_image     String?
@@ -27,12 +27,13 @@ model Tenant {
   associates       Associate[]
   associatePlans   AssociatePlan[]
   associateAddress AssociateAddress[]
+  roles Role[]
 
   @@map("tenants")
 }
 
 model User {
-  id              String    @id @default(uuid())
+  id              String    @id @default(ulid())
   tenant_id       String
   name            String
   initials        String
@@ -77,7 +78,7 @@ model AssociateStatus {
 }
 
 model AssociatePlan {
-  id         String    @id @default(uuid())
+  id         String    @id @default(ulid())
   tenant_id  String
   name       String    
   created_at DateTime  @default(now())
@@ -91,7 +92,7 @@ model AssociatePlan {
 }
 
 model Associate {
-  id                           String    @id @default(uuid())
+  id                           String    @id @default(ulid())
   tenant_id                    String
   user_id                      String    @unique
   associate_status_id          Int
@@ -121,7 +122,7 @@ model Associate {
 }
 
 model Dependent {
-  id                        String    @id @default(uuid())
+  id                        String    @id @default(ulid())
   tenant_id                 String?
   associate_id              String
   dependent_relationship_id Int?
@@ -150,7 +151,7 @@ model DependentRelationship {
 }
 
 model PaymentMethod {
-  id           String    @id @default(uuid())
+  id           String    @id @default(ulid())
   name         String    @unique
   payment_code String?
   created_at   DateTime  @default(now())
@@ -162,7 +163,7 @@ model PaymentMethod {
 }
 
 model AssociateAddress {
-  id               String    @id @default(uuid())
+  id               String    @id @default(ulid())
   tenant_id        String
   associate_id     String
   street           String
@@ -188,7 +189,7 @@ model AssociateAddress {
 }
 
 model CountryState {
-  id         String    @id @default(uuid())
+  id         String    @id @default(ulid())
   name       String
   initials   String    @unique
   created_at DateTime  @default(now())
@@ -201,9 +202,13 @@ model CountryState {
 
 model Role {
   id         Int       @id @default(autoincrement())
-  name       String    @unique
+  tenant_id  String?
+  name       String    
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
+
+  tenant Tenant? @relation(fields: [tenant_id], references: [id])
+
 
   users       User[]
   permissions RolesHasPermissions[]
@@ -250,7 +255,7 @@ model RolesHasPermissions {
 }
 
 model PasswordResetToken {
-  id         String    @id @default(uuid())
+  id         String    @id @default(ulid())
   token      String    @unique
   user_id    String
   expires_at DateTime

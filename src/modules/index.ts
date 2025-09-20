@@ -17,3 +17,4 @@ export { AssociateStatusModule } from './associate-status/associate-status.modul
 export { DependentsModule } from './dependents/dependents.module';
 export { TenantInformationsModule } from './tenant-informations/tenant-informations.module';
 export { MenusModule } from './menus/menus.module';
+export { PdfModule } from './pdf/pdf.module';

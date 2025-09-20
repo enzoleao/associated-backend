@@ -15,6 +15,73 @@ export class AssociatesRepository implements IAssociatesRepository {
     private readonly cls: ClsService
   ){}
 
+  getAssociateById(associatedId: string): Promise<any> {
+    return this.prismaService.tenantQuery('user', 'findUnique', {
+      where: {
+        id: associatedId
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image_path: true,
+        initials: true,
+        cpf: true,
+        phone: true,
+        birthday: true,
+        associate: {
+          select: {
+            id: true,
+            membership_date: true,
+            payment_due_date: true,
+            associateStatus: {
+              select: {
+                id: true,
+                name: true,
+                color: true
+              },
+            },
+            associatePlan: {
+              select: {
+                id: true,
+                name: true
+              }
+            },
+            AssociateAddress: {
+              select: {
+                id: true,
+                street: true,
+                number: true,
+                neighborhood: true,
+                city: true,
+                zip_code:true,
+                country_state: {
+                  select: {
+                    id: true,
+                    name: true,
+                    initials: true
+                  }
+                }
+              }
+            },
+            paymentPreferenceMethod: {
+              select: {
+                id: true,
+                name: true
+              }
+            },
+            _count: {
+              select: {
+                dependent: true
+              }
+            }
+          },
+          
+        }
+      }
+    })
+  }
+
 
   async getAssociates(paginationQueryDto: GetAssociatesRequestParams): Promise<any> {
     const tenantId = await this.cls.get('tenantId');

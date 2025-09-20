@@ -5,6 +5,8 @@ export class AssociatesPermissionSeeder {
   private associatePermissions = [
     { name: 'associates.read', resource_name: 'ASSOCIATES', method: 'GET' },
     { name: 'associates.associate-report.read', resource_name: 'ASSOCIATES', method: 'GET' },
+    { name: 'associates.presign-profile-image.read', resource_name: 'ASSOCIATES', method: 'GET' },
+    { name: 'associates.pdf-report.read', resource_name: 'ASSOCIATES', method: 'GET' },
     { name: 'associates.create', resource_name: 'ASSOCIATES', method: 'POST' },
     { name: 'associates.update', resource_name: 'ASSOCIATES', method: 'PUT' },
     { name: 'associates.delete', resource_name: 'ASSOCIATES', method: 'DELETE' },

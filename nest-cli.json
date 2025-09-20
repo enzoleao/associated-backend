@@ -8,6 +8,10 @@
       {
         "include": "modules/emails/templates/**/*",
         "outDir": "dist/src"
+      },
+      {
+        "include": "modules/pdf/templates/**/*",
+        "outDir": "dist/src"
       }
     ]
   }

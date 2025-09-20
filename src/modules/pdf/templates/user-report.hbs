@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório do Associado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      padding-top: 0px;
+      color: #333;
+      margin: 0;
+      background-color: #fff;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .header h1 {
+      color: #4B0082;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .header p {
+      color: #555;
+      font-size: 14px;
+      margin: 5px 0 0;
+    }
+    .user-card {
+      position: relative; /* necessário para o ::before */
+      margin-top: 30px;
+      background: linear-gradient(90deg, #f9f9ff, #f1f3fa);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden; /* garante que nada vaze fora do radius */
+    }
+
+    .user-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px; 
+      background: linear-gradient(180deg, #6C63FF, #4B0082); 
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+    .avatar {
+      background: linear-gradient(135deg, #6C63FF, #4B0082);
+      color: white;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: self-start;
+      gap: 10px;
+    }
+    .user-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+    .status {
+      background-color: #D1FAD7;
+      color: #008000;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .info-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .info-box {
+      flex: 1;
+      background-color: #F9F9FF;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    .info-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #4B0082;
+      font-size: 14px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 6px;
+    }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .info-item .label {
+      font-weight: bold;
+      color: #555;
+    }
+    .info-item .value {
+      color: #333;
+      text-align: right;
+    }
+    .address-section {
+      margin-bottom: 25px;
+    }
+    .address-title {
+      font-weight: 600;
+      color: #4B0082;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .address-box {
+      background-color: #F0F8FF;
+      border-radius: 12px;
+      padding: 18px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .stats-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    .stat-box {
+      flex: 1;
+      background: linear-gradient(135deg, #6C63FF, #4B0082);
+      color: white;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-number {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 13px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .fixed-logo {
+      height: 120px;
+      width: auto;
+      z-index: 1;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="{{logoUrl}}" alt="Logo" class="fixed-logo" />
+    <h1>Relatório do Associado</h1>
+    <p>Informações Completas e Detalhadas</p>
+  </div>
+
+  <div class="user-card">
+    <div class="avatar">{{initials}}</div>
+    <div class="user-info">
+      <span class="user-name">{{name}}</span>
+      {{#if isActive}}
+        <span class="status">ATIVO</span>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="info-container">
+  <div class="info-box">
+    <div class="info-title">📋 Informações Pessoais</div>
+    <div class="info-item"><span class="label">Nome Completo:</span> <span class="value">{{name}}</span></div>
+    <div class="info-item"><span class="label">CPF:</span> <span class="value">{{cpf}}</span></div>
+    <div class="info-item"><span class="label">Data de Nascimento:</span> <span class="value">{{birthDate}}</span></div>
+    <div class="info-item"><span class="label">Email:</span> <span class="value">{{email}}</span></div>
+    <div class="info-item"><span class="label">Telefone:</span> <span class="value">{{phone}}</span></div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">🏛️ Informações da Associação</div>
+    <div class="info-item"><span class="label">Data de Adesão:</span> <span class="value">{{joinDate}}</span></div>
+    <div class="info-item"><span class="label">Categoria:</span> <span class="value">{{category}}</span></div>
+    <div class="info-item"><span class="label">Status:</span> <span class="value">{{status}}</span></div>
+    <div class="info-item"><span class="label">Dependentes:</span> <span class="value">{{dependents}}</span></div>
+    <div class="info-item"><span class="label">Último Pagamento:</span> <span class="value">{{lastPayment}}</span></div>
+  </div>
+  </div>
+
+  <div class="address-section">
+    <div class="address-title">📍 Endereço Completo</div>
+    <div class="address-box">
+      {{address.street}}, {{address.number}}<br>
+      {{address.neighborhood}}<br>
+      {{address.city}} - {{address.state}}<br>
+      CEP: {{address.zip}}
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-box">
+      <div class="stat-number">{{daysAsMember}}</div>
+      <div class="stat-label">Dias como Associado</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">{{dependents}}</div>
+      <div class="stat-label">Dependentes</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number">✔</div>
+      <div class="stat-label">Status Atual</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Este relatório foi gerado automaticamente pelo sistema de gestão de associados.<br>
+    Gerado em: {{generatedAt}}
+  </div>
+
+</body>
+</html>

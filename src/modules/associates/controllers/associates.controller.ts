@@ -1,7 +1,8 @@
 import { Endpoint } from '@/common/decorators/endpoint';
-import { Body, Controller, Query } from '@nestjs/common';
+import { Body, Controller, Param, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { CreateAssociateRequestDto } from '../dtos/create-associate/create-associate-request.dto';
-import { CreateAssociateUseCase, GetAssociatesReportUseCase, GetAssociatesUseCase, PresignProfileImageUseCase } from '../use-cases';
+import { CreateAssociateUseCase, GetAssociateByIdUseCase, GetAssociatesReportUseCase, GetAssociatesUseCase, GetPdfReportUseCase, PresignProfileImageUseCase } from '../use-cases';
 import { PresignProfileImageRequestDto } from '../dtos/presign-profile-image/presign-profile-image-request.dto';
 import { GetAssociatesRequestParams } from '../dtos/get-associates/get-associates-request.dto';
 
@@ -12,7 +13,11 @@ export class AssociatesController {
     private readonly presignProfileImageUseCase: PresignProfileImageUseCase,
     private readonly getAssociatesUseCase: GetAssociatesUseCase,
     private readonly getAssociatesReportUseCase: GetAssociatesReportUseCase,
+    private readonly getAssociatesByIdUseCase: GetAssociateByIdUseCase,
+    private readonly getAssociatePdfReportUseCase: GetPdfReportUseCase
   ){}
+
+
 
   @Endpoint({
       method: 'POST',
@@ -50,5 +55,33 @@ export class AssociatesController {
     })
   getAssociateReport() {
     return this.getAssociatesReportUseCase.execute()
+  }
+
+
+  @Endpoint({
+    method: 'GET',
+    route: ':id',
+    summary: 'Get Associate By Id.',
+    isProtectedRoute: true
+  })
+  getAssociateById(@Param('id') associatedId: string) {
+    return this.getAssociatesByIdUseCase.execute(associatedId)
+  } 
+  
+  @Endpoint({
+    method: 'GET',
+    route: 'pdf-report/:id',
+    summary: 'Get Pdf Report By User Id.',
+    isProtectedRoute: true
+  })
+  async associatePdfReport(@Param('id') associatedId: string, @Res() res: Response) {
+    const pdfBuffer = await this.getAssociatePdfReportUseCase.execute(associatedId)
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'inline; filename=relatorio-associado.pdf',
+      'Content-Length': pdfBuffer.length,
+    });
+
+    res.send(pdfBuffer);
   }
 }

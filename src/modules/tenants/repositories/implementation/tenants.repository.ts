@@ -16,6 +16,7 @@ export class TenantsRepository implements ITenantsRepository {
     return this.prismaService.tenant.findUnique({
       select: {
         name: true,
+        logo_image: true,
       },
       where: {
         id: tenantId,

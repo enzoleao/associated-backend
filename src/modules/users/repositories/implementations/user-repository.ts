@@ -35,18 +35,29 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  createUserAssociated(data: ICreateUserAssociated): Promise<User> {
-    return this.prismaService.connectTenantQuery('user', 'create', {
-      data: {
-        ...data,
-        birthday: new Date(data.birthday),
-        role: {
-          connect: {
-            name: UserRolesEnum.ASSOCIATED,
-          },
-        },
-      }
-    })
+ async createUserAssociated(data: ICreateUserAssociated): Promise<any> {
+    const associatedRole = await this.prismaService.tenantQuery<{ id: string }>('role', 'findFirst', {
+      where: {
+        name: UserRolesEnum.ASSOCIATED
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (associatedRole) {
+        return this.prismaService.connectTenantQuery('user', 'create', {
+          data: {
+            ...data,
+            birthday: new Date(data.birthday),
+            role: {
+              connect: {
+                id: associatedRole.id,
+              },
+            },
+          }
+        })
+    }
+
   }
 
   resetPassword({ password, user_id }: { password: string; user_id: string; }): Promise<User> {

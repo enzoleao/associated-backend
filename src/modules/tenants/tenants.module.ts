@@ -7,6 +7,6 @@ import { GetTenantInformationsUsecase } from './use-cases';
 @Module({
   controllers: [TenantsController],
   providers: [GetTenantInformationsUsecase, PrismaService, TenantsRepository],
-  exports: []
+  exports: [GetTenantInformationsUsecase]
 })
 export class TenantsModule {}

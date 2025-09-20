@@ -23,7 +23,6 @@ export class MinioStorageService {
     });
   }
 
-  // Upload presigned URL
   async getPresignedUploadUrl({
     key,
     contentType,
