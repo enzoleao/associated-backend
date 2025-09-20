@@ -166,19 +166,19 @@ model AssociateAddress {
   id               String    @id @default(ulid())
   tenant_id        String
   associate_id     String
-  street           String
-  neighborhood     String
-  city             String
-  number           String
+  street           String?
+  neighborhood     String?
+  city             String?
+  number           String?
   complement       String?
-  zip_code         String
-  country_state_id String
+  zip_code         String?
+  country_state_id String?
   creator_user_id  String
   updater_user_id  String?
   created_at       DateTime  @default(now())
   updated_at       DateTime? @updatedAt
 
-  country_state CountryState @relation(fields: [country_state_id], references: [id])
+  country_state CountryState? @relation(fields: [country_state_id], references: [id])
   tenant        Tenant       @relation(fields: [tenant_id], references: [id])
   associate     Associate    @relation(fields: [associate_id], references: [id])
 
