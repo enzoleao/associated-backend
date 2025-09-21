@@ -27,30 +27,56 @@ model Tenant {
   associates       Associate[]
   associatePlans   AssociatePlan[]
   associateAddress AssociateAddress[]
-  roles Role[]
+  roles            Role[]
 
   @@map("tenants")
 }
 
+model MaritalStatus {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  users User[]
+
+  @@map("marital_status")
+}
+
+model Gender {
+  id         Int       @id @default(autoincrement())
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  users User[]
+
+  @@map("genders")
+}
+
 model User {
-  id              String    @id @default(ulid())
-  tenant_id       String
-  name            String
-  initials        String
-  image_path      String?
-  email           String
-  color           String?
-  cpf             String?
-  rg              String?
-  profession_name String?
-  phone           String?
-  birthday        DateTime? @db.Date
-  password        String
-  role_id         Int
-  created_at      DateTime  @default(now())
-  updated_at      DateTime? @updatedAt
+  id                String    @id @default(ulid())
+  tenant_id         String
+  name              String
+  initials          String
+  image_path        String?
+  email             String
+  color             String?
+  cpf               String?
+  rg                String?
+  profession_name   String?
+  phone             String?
+  birthday          DateTime? @db.Date
+  password          String
+  role_id           Int
+  marital_status_id Int?
+  gender_id         Int?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime? @updatedAt
 
   role                Role                 @relation(fields: [role_id], references: [id])
+  marital_status      MaritalStatus?       @relation(fields: [marital_status_id], references: [id])
+  gender              Gender?              @relation(fields: [gender_id], references: [id])
   tenant              Tenant               @relation(fields: [tenant_id], references: [id])
   passwordResetTokens PasswordResetToken[]
 
@@ -80,7 +106,7 @@ model AssociateStatus {
 model AssociatePlan {
   id         String    @id @default(ulid())
   tenant_id  String
-  name       String    
+  name       String
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
@@ -179,8 +205,8 @@ model AssociateAddress {
   updated_at       DateTime? @updatedAt
 
   country_state CountryState? @relation(fields: [country_state_id], references: [id])
-  tenant        Tenant       @relation(fields: [tenant_id], references: [id])
-  associate     Associate    @relation(fields: [associate_id], references: [id])
+  tenant        Tenant        @relation(fields: [tenant_id], references: [id])
+  associate     Associate     @relation(fields: [associate_id], references: [id])
 
   creator_user User  @relation("AssociateAddressCreator", fields: [creator_user_id], references: [id])
   updater_user User? @relation("AssociateAddressUpdater", fields: [updater_user_id], references: [id])
@@ -203,12 +229,11 @@ model CountryState {
 model Role {
   id         Int       @id @default(autoincrement())
   tenant_id  String?
-  name       String    
+  name       String
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
   tenant Tenant? @relation(fields: [tenant_id], references: [id])
-
 
   users       User[]
   permissions RolesHasPermissions[]
@@ -223,7 +248,7 @@ model Resource {
   updated_at DateTime? @updatedAt
 
   permissions Permission[]
-  menus Menu[]
+  menus       Menu[]
 
   @@map("resources")
 }
@@ -231,7 +256,7 @@ model Resource {
 model Permission {
   id          Int       @id @default(autoincrement())
   name        String    @unique
-  resource_id Int?       
+  resource_id Int?
   method      String
   created_at  DateTime  @default(now())
   updated_at  DateTime? @updatedAt
@@ -269,14 +294,14 @@ model PasswordResetToken {
 }
 
 model Menu {
-  id         Int       @id @default(autoincrement())
-  name       String    
-  path       String?   @unique
+  id          Int       @id @default(autoincrement())
+  name        String
+  path        String?   @unique
   resource_id Int?
-  icon       String?
-  order      Int       @default(0)
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  icon        String?
+  order       Int       @default(0)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
 
   resource Resource? @relation(fields: [resource_id], references: [id])
   subMenus SubMenu[]
@@ -287,7 +312,7 @@ model Menu {
 model SubMenu {
   id         Int       @id @default(autoincrement())
   name       String
-  path       String?  @unique
+  path       String?   @unique
   menu_id    Int
   icon       String?
   order      Int       @default(0)
