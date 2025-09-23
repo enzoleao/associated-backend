@@ -27,6 +27,7 @@ export class AssociatesRepository implements IAssociatesRepository {
         image_path: true,
         initials: true,
         cpf: true,
+        color: true,
         phone: true,
         birthday: true,
         associate: {
